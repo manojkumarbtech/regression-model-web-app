@@ -41,4 +41,10 @@ st.plotly_chart(fig)
 
 st.subheader(f"Here is the correlation of {option} and {option_2} for all players.")
 
-st.write(data[option].corr(data[option_2]))
+try:
+    st.write(data[option].corr(data[option_2]))
+except ValueError:
+    st.write("Cannot find correlation between the selected values")
+
+fig_2 = px.bar(data, x=option, y=option_2, color='PLAYING ROLE')
+st.plotly_chart(fig_2)
