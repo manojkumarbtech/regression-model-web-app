@@ -6,8 +6,6 @@ import numpy as np
 
 data = pd.read_csv('IPL IMB381IPL2013.csv')
 
-sold_price = 0
-
 st.title("Sold Price Estimate for IPL Player")
 
 st.page_link("pages/Player_List.py",
@@ -22,14 +20,18 @@ col = ("SOLD PRICE", "AGE", "COUNTRY", "TEAM", "T-RUNS", "T-WKTS",
        "RUNS-S", "HS", "AVE", "SR-B", "SIXERS", "RUNS-C", "WKTS",
        "AVE-BL", "ECON", "SR-BL", "AUCTION YEAR", "BASE PRICE")
 
-option = st.selectbox("Select data to view on x-axis", col)
+option = st.selectbox("Select data used to predict (view on horizontal axis)", col,
+                      key="main_op")
 
-option_2 = st.selectbox("Select data to view on y-axis", col)
+option_2 = st.selectbox("Select data to be predicted (view on vertical axis)", col,
+                        key="main_op_2")
 
 # linear regression
 
 try:
-    st.subheader(f"Here is the linear regression of {option} and {option_2} for all players.")
+    st.subheader(f"Here is the linear regression of {option} and {option_2} for all players."
+                 , help="Enter appropriate values to get linear regression"
+                 )
     corr = data[option].corr(data[option_2])
     st.write(corr)
 
@@ -49,7 +51,7 @@ try:
     indep_var_new = np.array([int(indep_var_txt)])
     indep_var_new = indep_var_new.reshape(-1, 1)
     dep_var_new = model.predict(indep_var_new)
-    st.write(dep_var_new)
+    st.info(dep_var_new[0][0])
 
     indep_var_int = int(indep_var_txt)
     X = ([indep_var_int / 2, indep_var_int * 2, indep_var_int * 5])

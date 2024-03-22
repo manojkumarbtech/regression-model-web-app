@@ -13,9 +13,11 @@ col = ["Sl.NO.", "PLAYER NAME", "AGE", "COUNTRY", "TEAM", "PLAYING ROLE",
        "SOLD PRICE"
        ]
 
-option = st.selectbox("Select data to view for the specific player", col)
+option = st.selectbox("Select data to view for the specific player", col,
+                      key='player_op')
 
-option_2 = st.selectbox("Select data to view for the specific player", col)
+option_2 = st.selectbox("Select data to view for the specific player", col,
+                        key='player_op_2')
 
 filtered_data = data_1[['PLAYER NAME', option, option_2]]
 
