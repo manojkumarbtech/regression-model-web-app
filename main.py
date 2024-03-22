@@ -4,15 +4,11 @@ import streamlit as st
 from sklearn import linear_model
 import numpy as np
 
-prompt = " Enter player by using the format: <surname>, <firstname" \
-         " initials> for e.g. Dilshan, TM :"
-
 data = pd.read_csv('IPL IMB381IPL2013.csv')
 
 sold_price = 0
 
 st.title("Sold Price Estimate for IPL Player")
-player = st.text_input(prompt)
 
 st.page_link("pages/Player_List.py",
              label="Check the player list page to"
@@ -26,9 +22,9 @@ col = ("SOLD PRICE", "AGE", "COUNTRY", "TEAM", "T-RUNS", "T-WKTS",
        "RUNS-S", "HS", "AVE", "SR-B", "SIXERS", "RUNS-C", "WKTS",
        "AVE-BL", "ECON", "SR-BL", "AUCTION YEAR", "BASE PRICE")
 
-option = st.selectbox("Select data to view on x-axis and for the specific player", col)
+option = st.selectbox("Select data to view on x-axis", col)
 
-option_2 = st.selectbox("Select data to view on y-axis and for the specific player", col)
+option_2 = st.selectbox("Select data to view on y-axis", col)
 
 # linear regression
 
@@ -65,15 +61,6 @@ try:
 
 except ValueError:
     st.info("Cannot find regression between the selected values")
-
-filtered_data = data[['PLAYER NAME', option, option_2]]
-
-if player:
-    # Get the player data
-    player_role = data.loc[data['PLAYER NAME'] == player, 'PLAYING ROLE'].values[0]
-    player_value = filtered_data.loc[filtered_data['PLAYER NAME'] == player, (option, option_2)].values[0]
-    st.info(f"{player} is a {player_role} whose {option} is/are {player_value[0]} " +
-             f"and the {option_2} is/are {player_value[1]}.")
 
 st.subheader(f"Here is scatter plot of {option} and {option_2} for all players.")
 
