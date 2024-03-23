@@ -31,9 +31,9 @@ if player:
             f"and the {option_2} is/are {player_value[1]}.")
 
 num_play = st.slider("What is the range of players you want to get details of ?", value=(1, 130),
-                     help="SSSSSSSSLLLLLIIIIIDDDDDEEEEE")
+                     help="Select the first and last player no. on slider")
 num_col = st.slider("What is the range of columns you want to see?", value=(1, 26),
-                     help="Total Columns = 26")
+                    help="Total Columns = 26")
 
 disp_col = col[num_col[0]:num_col[1]]
 

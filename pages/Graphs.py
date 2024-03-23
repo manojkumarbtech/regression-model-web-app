@@ -1,12 +1,13 @@
 import streamlit as st
 import graphviz
 
-st.title('A Guide to Physics')
+st.title('A Guide to Physics (Beta)')
 # Create a graphlib graph object
 st.subheader('The possible pathways one can take to complete their Physics prep for '
              'whatever goal one may be aspiring to in XI and XII Class.')
 
 graph = graphviz.Digraph()
+graph.edge('Start', 'Units and Dimension')
 graph.edge('Units and Dimension', 'Vectors')
 graph.edge('Units and Dimension', 'Differentiation & Integration')
 graph.edge('Vectors', 'Kinematics')
