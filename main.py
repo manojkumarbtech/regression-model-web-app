@@ -1,5 +1,4 @@
 import pandas as pd
-import plotly.express as px
 import streamlit as st
 from sklearn import linear_model
 import numpy as np
@@ -12,6 +11,10 @@ st.page_link("pages/Player_List.py",
              label="Check the player list page to"
                    " get player names.",
              icon="🏏")
+
+st.page_link("pages/Charts.py",
+             label="Click here to see Data Viz",
+             icon="📈")
 
 # Categories to show in dropdown menu
 
@@ -63,13 +66,3 @@ try:
 
 except ValueError:
     st.info("Cannot find regression between the selected values")
-
-st.subheader(f"Here is scatter plot of {option} and {option_2} for all players.")
-
-# Create a plot
-
-fig = px.scatter(data, x=option, y=option_2, color="PLAYING ROLE")
-st.plotly_chart(fig)
-
-fig_2 = px.bar(data, x=option, y=option_2, color='PLAYING ROLE')
-st.plotly_chart(fig_2)
