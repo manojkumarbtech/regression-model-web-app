@@ -3,7 +3,7 @@ import graphviz
 
 st.title('A Guide to Physics')
 # Create a graphlib graph object
-st.subheader('The possible pathways one can take to complete their Physics prep for'
+st.subheader('The possible pathways one can take to complete their Physics prep for '
              'whatever goal one may be aspiring to in XI and XII Class.')
 
 graph = graphviz.Digraph()

@@ -23,10 +23,10 @@ col = ("SOLD PRICE", "AGE", "COUNTRY", "TEAM", "T-RUNS", "T-WKTS",
        "RUNS-S", "HS", "AVE", "SR-B", "SIXERS", "RUNS-C", "WKTS",
        "AVE-BL", "ECON", "SR-BL", "AUCTION YEAR", "BASE PRICE")
 
-option = st.selectbox("Select data used to predict (view on horizontal axis)", col,
+option = st.selectbox("Select data used to predict", col,
                       key="main_op")
 
-option_2 = st.selectbox("Select data to be predicted (view on vertical axis)", col,
+option_2 = st.selectbox("Select data to be predicted", col,
                         key="main_op_2")
 
 # linear regression

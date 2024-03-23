@@ -24,7 +24,7 @@ chart_op = st.multiselect('Select Chart(s) you want to see', chart_list,
                           key='chart_type')
 
 st.subheader(f"Here is/are plot(s) of {option} and {option_2} for all players"
-             f"grouped by {option_col}.")
+             f" grouped by {option_col}.")
 
 # Create a plot
 
