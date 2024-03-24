@@ -55,16 +55,16 @@ try:
     lm = linear_model.LinearRegression()
     model = lm.fit(indep_var, dep_var)
 
-    st.write(f"Slope : {str(model.coef_)}. In the context of cricket player data, the slope\n"
+    st.write(f"Slope : {str(model.coef_[0][0])}. In the context of cricket player data, the slope\n"
              f" in a linear regression model represents the change in the\n"
              f" dependent variable ({option_2}) for a one-unit \n"
              f" change in the independent variable ({option})"
              )
 
-    st.write("Intercept : " + str(model.intercept_) +
-             ("The intercept in a linear regression model is the predicted "
+    st.write("Intercept : " + str(model.intercept_[0]) +
+             (" The intercept in a linear regression model is the predicted "
               "value of the dependent variable when the \n"
-              "independent variable(s) is zero"))
+              "independent variable is zero"))
 
     st.write("R-Square value for the model : " + str(model.score(indep_var, dep_var)))
 
