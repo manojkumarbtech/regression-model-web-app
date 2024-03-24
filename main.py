@@ -7,9 +7,20 @@ data = pd.read_csv('IPL IMB381IPL2013.csv')
 
 st.title("Sold Price Estimate for IPL Player")
 
+with st.expander("About this app"):
+    st.write("""
+        Get in the IPL spirit this season by playing around with
+        this fun app! Predict any feature for e.g. the number of sixers
+        a player may hit using their base or sold price.
+        """)
+    st.info("""
+        Linear regression is a statistical method used to understand the
+         relationship between two variables by fitting a linear equation
+          to the observed data
+        """)
+
 st.page_link("pages/Player_List.py",
-             label="Check the player list page to"
-                   " get player names.",
+             label="Click here to see the players list page",
              icon="🏏")
 
 st.page_link("pages/Charts.py",
@@ -36,7 +47,7 @@ try:
                  , help="Enter appropriate values to get linear regression"
                  )
     corr = data[option].corr(data[option_2])
-    st.write(corr)
+    st.write(f'Correlation of {option} and {option_2} is : ' + str(corr))
 
     indep_var = pd.DataFrame(data[option])
     dep_var = pd.DataFrame(data[option_2])
@@ -44,9 +55,16 @@ try:
     lm = linear_model.LinearRegression()
     model = lm.fit(indep_var, dep_var)
 
-    st.write("Slope : {0}".format(str(model.coef_)))
+    st.write(f"Slope : {str(model.coef_)}. In the context of cricket player data, the slope\n"
+             f" in a linear regression model represents the change in the\n"
+             f" dependent variable ({option_2}) for a one-unit \n"
+             f" change in the independent variable ({option})"
+             )
 
-    st.write("Intercept : " + str(model.intercept_))
+    st.write("Intercept : " + str(model.intercept_) +
+             ("The intercept in a linear regression model is the predicted "
+              "value of the dependent variable when the \n"
+              "independent variable(s) is zero"))
 
     st.write("R-Square value for the model : " + str(model.score(indep_var, dep_var)))
 
@@ -61,7 +79,7 @@ try:
     X = pd.DataFrame(X)
     Y = model.predict(X)
     Y = pd.DataFrame(Y)
-    df = pd.concat([X,Y],axis=1, keys = [option, f"{option_2} predicted"])
+    df = pd.concat([X, Y], axis=1, keys=[option, f"{option_2} predicted"])
     st.write(df)
 
 except ValueError:
