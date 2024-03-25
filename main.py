@@ -29,13 +29,17 @@ st.page_link("pages/Charts.py",
 
 # Categories to show in dropdown menu
 
-col = ("SOLD PRICE", "AGE", "COUNTRY", "TEAM", "T-RUNS", "T-WKTS",
+col = ["SOLD PRICE", "AGE", "COUNTRY", "TEAM", "T-RUNS", "T-WKTS",
        "ODI-RUNS-S", "ODI-SR-B", "ODI-WKTS", "ODI-SR-BL", "CAPTAINCY EXP",
        "RUNS-S", "HS", "AVE", "SR-B", "SIXERS", "RUNS-C", "WKTS",
-       "AVE-BL", "ECON", "SR-BL", "AUCTION YEAR", "BASE PRICE")
+       "AVE-BL", "ECON", "SR-BL", "AUCTION YEAR", "BASE PRICE"]
 
 option = st.selectbox("Select data used to predict", col,
                       key="main_op")
+
+pop_var = col.index(option)
+
+col.pop(pop_var)
 
 option_2 = st.selectbox("Select data to be predicted", col,
                         key="main_op_2")
