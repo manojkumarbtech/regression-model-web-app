@@ -8,21 +8,21 @@ prompt = 'Select a categorical i.e. non-numeric data.'
 
 data = pd.read_csv('IPL IMB381IPL2013.csv')
 
-col = ["COUNTRY", "TEAM", "PLAYING ROLE", "AGE",
+col_mlr = ["COUNTRY", "TEAM", "PLAYING ROLE", "AGE",
        "CAPTAINCY EXP", "AUCTION YEAR"]
 
 col_num = ["T-RUNS", "T-WKTS", "AGE", "ODI-RUNS-S", "ODI-SR-B", "ODI-WKTS", "ODI-SR-BL",
            "CAPTAINCY EXP", "RUNS-S", "HS", "AVE", "SR-B", "SIXERS", "RUNS-C", "WKTS",
            "AVE-BL", "ECON", "SR-BL", "AUCTION YEAR", "BASE PRICE", "SOLD PRICE"]
 
-heatmap_op_1 = st.selectbox('Select Features you want to see on horizonatal axis of the heatmap', col,
+heatmap_op_1 = st.selectbox('Select Features you want to see on horizonatal axis of the heatmap', col_mlr,
                             key='heatmap_x', help=prompt)
 
-pop_var = col.index(heatmap_op_1)
+pop_var = col_mlr.index(heatmap_op_1)
 
-col.pop(pop_var)
+col_mlr.pop(pop_var)
 
-heatmap_op_2 = st.selectbox('Select Features you want to see on vertical axis of the heatmap', col,
+heatmap_op_2 = st.selectbox('Select Features you want to see on vertical axis of the heatmap', col_mlr,
                             key='heatmap_y', help=prompt)
 
 heatmap_op_num = st.selectbox('Select data to to be shown by its colour intensity in the heatmap', col_num,

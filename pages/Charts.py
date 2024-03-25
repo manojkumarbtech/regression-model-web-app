@@ -4,28 +4,28 @@ import plotly.express as px
 
 data = pd.read_csv('IPL IMB381IPL2013.csv')
 
-col = ["COUNTRY", "TEAM", "PLAYING ROLE", "T-RUNS", "T-WKTS", "AGE",
+col_ch = ["COUNTRY", "TEAM", "PLAYING ROLE", "T-RUNS", "T-WKTS", "AGE",
        "ODI-RUNS-S", "ODI-SR-B", "ODI-WKTS", "ODI-SR-BL", "CAPTAINCY EXP",
        "RUNS-S", "HS", "AVE", "SR-B", "SIXERS", "RUNS-C", "WKTS",
        "AVE-BL", "ECON", "SR-BL", "AUCTION YEAR", "BASE PRICE", "SOLD PRICE"]
 
 chart_list = ['Bar', 'Scatter', 'Plotly']
 
-option = st.selectbox("Select data to view on x-axis", col,
+option = st.selectbox("Select data to view on x-axis", col_ch,
                       key='chart_op')
 
-pop_var = col.index(option)
+pop_var = col_ch.index(option)
 
-col.pop(pop_var)
+col_ch.pop(pop_var)
 
-option_2 = st.selectbox("Select data to view on y-axis", col,
+option_2 = st.selectbox("Select data to view on y-axis", col_ch,
                         key='chart_op_2')
 
-pop_var = col.index(option_2)
+pop_var = col_ch.index(option_2)
 
-col.pop(pop_var)
+col_ch.pop(pop_var)
 
-option_col = st.selectbox("Select data to to be shown by its colour intensity in the graph", col,
+option_col = st.selectbox("Select data to to be shown by its colour intensity in the graph", col_ch,
                           key='chart_op_col')
 
 chart_op = st.multiselect('Select Chart(s) you want to see', chart_list,

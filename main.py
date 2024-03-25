@@ -103,3 +103,5 @@ disclaimer = "When you make conclusions from data analysis, you need" \
 
 with st.expander("Disclaimer"):
     st.warning(disclaimer)
+
+# Unresolved Issue: Column List not popping for main and charts pages

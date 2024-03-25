@@ -6,17 +6,17 @@ prompt = " Enter player by using the format: <lastname>, <firstname" \
 
 data_1 = pd.read_csv('IPL IMB381IPL2013.csv')
 
-col = ["Sl.NO.", "PLAYER NAME", "AGE", "COUNTRY", "TEAM", "PLAYING ROLE",
+col_pl = ["Sl.NO.", "PLAYER NAME", "AGE", "COUNTRY", "TEAM", "PLAYING ROLE",
        "T-RUNS", "T-WKTS", "ODI-RUNS-S", "ODI-SR-B", "ODI-WKTS", "ODI-SR-BL",
        "CAPTAINCY EXP", "RUNS-S", "HS", "AVE", "SR-B", "SIXERS", "RUNS-C", "WKTS",
        "AVE-BL", "ECON", "SR-BL", "AUCTION YEAR", "BASE PRICE",
        "SOLD PRICE"
-       ]
+          ]
 
-option = st.selectbox("Select data to view for the specific player", col,
+option = st.selectbox("Select data to view for the specific player", col_pl,
                       key='player_op')
 
-option_2 = st.selectbox("Select data to view for the specific player", col,
+option_2 = st.selectbox("Select data to view for the specific player", col_pl,
                         key='player_op_2')
 
 filtered_data = data_1[['PLAYER NAME', option, option_2]]
@@ -35,7 +35,7 @@ num_play = st.slider("What is the range of players you want to get details of ?"
 num_col = st.slider("What is the range of columns you want to see?", value=(1, 26),
                     help="Total Columns = 26")
 
-disp_col = col[num_col[0]:num_col[1]]
+disp_col = col_pl[num_col[0]:num_col[1]]
 
 st.write(data_1[disp_col][num_play[0]:num_play[1]])
 
