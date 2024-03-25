@@ -17,7 +17,7 @@ option = st.selectbox("Select data to view on x-axis", col,
 option_2 = st.selectbox("Select data to view on y-axis", col,
                         key='chart_op_2')
 
-option_col = st.selectbox("Select data to aggregate", col,
+option_col = st.selectbox("Select data to to be shown by its colour intensity in the graph", col,
                           key='chart_op_col')
 
 chart_op = st.multiselect('Select Chart(s) you want to see', chart_list,

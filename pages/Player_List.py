@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 
-prompt = " Enter player by using the format: <surname>, <firstname" \
+prompt = " Enter player by using the format: <lastname>, <firstname" \
          " initials> for e.g. Dilshan, TM :"
 
 data_1 = pd.read_csv('IPL IMB381IPL2013.csv')
@@ -38,3 +38,5 @@ num_col = st.slider("What is the range of columns you want to see?", value=(1, 2
 disp_col = col[num_col[0]:num_col[1]]
 
 st.write(data_1[disp_col][num_play[0]:num_play[1]])
+
+# st.toast('Woah!')
