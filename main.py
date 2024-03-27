@@ -19,10 +19,6 @@ with st.expander("About this app"):
           to the observed data
         """)
 
-st.page_link("pages/Player_List.py",
-             label="Click here to see the players list page",
-             icon="🏏")
-
 st.page_link("pages/Charts.py",
              label="Click here to see Data Viz",
              icon="📈")
@@ -88,6 +84,11 @@ try:
 
 except ValueError:
     st.info("Cannot find regression between the selected values")
+
+# st.page_link("pages/Player_List.py",
+#             label="Click here to see the players list page along which"
+#                   " the model is aligned",
+#             icon="🏏")
 
 disclaimer = "When you make conclusions from data analysis, you need" \
                " to make sure that you don’t assume a causal relationship" \
