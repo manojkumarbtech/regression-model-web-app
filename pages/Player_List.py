@@ -28,7 +28,7 @@ try:
             player_role = filtered_data.loc[filtered_data['Name'] == player + ' ', 'Type'].values[0]
         except IndexError:
             st.info(player + " might not have been auctioned.")
-            player_role = 'not in auction database'
+            player_role = 'player'
 
         if 'Batting Stats' == stats_op:
             # display batting stats of the player
@@ -48,7 +48,7 @@ try:
 
 except IndexError:
     st.info(player + " might not have been auctioned.")
-    player_role = 'not in auction database'
+    player_role = 'player'
 except FileNotFoundError:
     st.warning("Woah there! pardner")
 
