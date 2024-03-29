@@ -72,7 +72,8 @@ try:
     indep_var_new = np.array([int(indep_var_txt)])
     indep_var_new = indep_var_new.reshape(-1, 1)
     dep_var_new = model.predict(indep_var_new)
-    st.info(dep_var_new[0][0])
+    st.info(f"The predicted value of {option_2} on the basis "
+            f"of {option} is " + str(dep_var_new[0][0]))
 
     indep_var_int = int(indep_var_txt)
     X = ([indep_var_int / 2, indep_var_int * 2, indep_var_int * 5])

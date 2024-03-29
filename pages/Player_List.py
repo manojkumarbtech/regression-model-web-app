@@ -1,13 +1,16 @@
 import streamlit as st
 import pandas as pd
 
-prompt_1 = "Enter player name"
+prompt_1 = "Enter player name for e.g. Jasprit Bumrah"
 
 filepath_player_auc = 'IPL_2023-22_Sold_Players.csv'
 
-player = st.text_input(prompt_1)
+# define default player
+player_def = "Virat Kohli"
 
-stats_op = st.selectbox("Select the stats you want to see of the player",
+player = st.text_input(label=prompt_1, value=player_def)
+
+stats_op = st.selectbox(f"Select the stats you want to see of {player}",
                           ('Batting Stats', 'Bowling Stats'), key='stats_op')
 
 # define select-box items
@@ -46,15 +49,19 @@ try:
 
             filepath_cric = "BOWLING STATS - IPL_2022.csv"
 
-except IndexError:
-    st.info(player + " might not have been auctioned.")
-    player_role = 'player'
+# except IndexError:
+#     st.info(player + " might not have been auctioned.")
+#     player_role = 'player'
+
 except FileNotFoundError:
     st.warning("Woah there! pardner")
 
 try:
     data = pd.read_csv(filepath_cric)
+except FileNotFoundError:
+    st.warning("Woah there! pardner")
 
+try:
     option = st.selectbox("Select data to view for the specific player", col_pl,
                           key='player_op')
 
@@ -76,6 +83,7 @@ try:
 
 except IndexError:
     st.info(player + " is not in player stats database you are referring to")
-except FileNotFoundError:
-    st.warning("Woah there! pardner")
+except NameError:
+    st.warning("Please enter a player name.")
+
 # st.toast('Woah!')
