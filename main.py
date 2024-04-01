@@ -107,3 +107,4 @@ with st.expander("Disclaimer"):
     st.warning(disclaimer)
 
 # Unresolved Issue: Column List not popping for main and charts pages
+# Issue Resolved / Reason: Col list pop. push updates to streamlit may take some time to go live

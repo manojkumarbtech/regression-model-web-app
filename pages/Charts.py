@@ -9,6 +9,10 @@ data = pd.read_csv('IPL IMB381IPL2013.csv')
 # get numeric columns
 num_col = data.select_dtypes(include=np.number).columns.tolist()
 
+# Unresolved issue: density plot not working with sold price
+num_col.remove('BASE PRICE')
+num_col.remove('SOLD PRICE')
+
 col_ch = ["COUNTRY", "TEAM", "PLAYING ROLE", "T-RUNS", "T-WKTS", "AGE",
        "ODI-RUNS-S", "ODI-SR-B", "ODI-WKTS", "ODI-SR-BL", "CAPTAINCY EXP",
        "RUNS-S", "HS", "AVE", "SR-B", "SIXERS", "RUNS-C", "WKTS",
@@ -36,8 +40,7 @@ option_col = st.selectbox("Select data to to be shown by its colour intensity in
 # density chart append to chart list
 
 if option in num_col:
-    if option_2 not in num_col:
-        chart_list.append('Density Plot')
+    chart_list.append('Density Plot')
 
 chart_op = st.multiselect('Select Chart(s) you want to see', chart_list,
                           key='chart_type', help="Density Plots will be shown for x-axis data")
@@ -60,3 +63,5 @@ for chart in chart_op:
     if chart == 'Density Plot':
         fig = ff.create_distplot([data[option]], [option])
         st.plotly_chart(fig)
+
+
