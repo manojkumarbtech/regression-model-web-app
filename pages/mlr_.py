@@ -36,6 +36,6 @@ try:
 except ValueError:
     st.warning("Select distinct data on horizontal & vertical axes and the color intensity")
 
-with st.expander("Don`t click here!"):
-    st.write("Stats-for-nerds")
-    st.info(st.session_state)
+# with st.expander("Don`t click here!"):
+#     st.write("Stats-for-nerds")
+#     st.info(st.session_state)

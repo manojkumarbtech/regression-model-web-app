@@ -1,8 +1,13 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+import numpy as np
+import plotly.figure_factory as ff
 
 data = pd.read_csv('IPL IMB381IPL2013.csv')
+
+# get numeric columns
+num_col = data.select_dtypes(include=np.number).columns.tolist()
 
 col_ch = ["COUNTRY", "TEAM", "PLAYING ROLE", "T-RUNS", "T-WKTS", "AGE",
        "ODI-RUNS-S", "ODI-SR-B", "ODI-WKTS", "ODI-SR-BL", "CAPTAINCY EXP",
@@ -28,13 +33,19 @@ col_ch.pop(pop_var)
 option_col = st.selectbox("Select data to to be shown by its colour intensity in the graph", col_ch,
                           key='chart_op_col')
 
+# density chart append to chart list
+
+if option in num_col:
+    if option_2 not in num_col:
+        chart_list.append('Density Plot')
+
 chart_op = st.multiselect('Select Chart(s) you want to see', chart_list,
-                          key='chart_type')
+                          key='chart_type', help="Density Plots will be shown for x-axis data")
 
-st.subheader(f"Here is/are plot(s) of {option} and {option_2} for all players"
-             f" grouped by {option_col}.")
+st.subheader(f"Plot(s) of {option} and {option_2} for all players"
+             f" indicating {option_col} by colour intensity.")
 
-# Create a plot
+# Create plot
 
 for chart in chart_op:
     if chart == 'Bar':
@@ -46,3 +57,6 @@ for chart in chart_op:
         st.plotly_chart(fig)
         fig_2 = px.bar(data, x=option, y=option_2, color=option_col)
         st.plotly_chart(fig_2)
+    if chart == 'Density Plot':
+        fig = ff.create_distplot([data[option]], [option])
+        st.plotly_chart(fig)

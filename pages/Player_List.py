@@ -28,7 +28,7 @@ try:
     if player:
         # Get the player data
         try:
-            player_role = filtered_data.loc[filtered_data['Name'] == player + ' ', 'Type'].values[0]
+            player_role = filtered_data.loc[filtered_data['Name'].str.strip() == player, 'Type'].values[0]
         except IndexError:
             st.info(player + " might not have been auctioned.")
             player_role = 'player'
