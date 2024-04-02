@@ -9,9 +9,11 @@ data = pd.read_csv('IPL IMB381IPL2013.csv')
 # get numeric columns
 num_col = data.select_dtypes(include=np.number).columns.tolist()
 
-# Unresolved issue: density plot not working with sold/base price
+# Unresolved issue: density plot not working with big numbers
 num_col.remove('BASE PRICE')
 num_col.remove('SOLD PRICE')
+num_col.remove('ODI-RUNS-S')
+num_col.remove('T-RUNS')
 
 col_ch = ["COUNTRY", "TEAM", "PLAYING ROLE", "T-RUNS", "T-WKTS", "AGE",
        "ODI-RUNS-S", "ODI-SR-B", "ODI-WKTS", "ODI-SR-BL", "CAPTAINCY EXP",
