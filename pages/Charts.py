@@ -9,7 +9,7 @@ data = pd.read_csv('IPL IMB381IPL2013.csv')
 # get numeric columns
 num_col = data.select_dtypes(include=np.number).columns.tolist()
 
-# Unresolved issue: density plot not working with sold price
+# Unresolved issue: density plot not working with sold/base price
 num_col.remove('BASE PRICE')
 num_col.remove('SOLD PRICE')
 

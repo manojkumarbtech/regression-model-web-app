@@ -3,6 +3,8 @@ import streamlit as st
 from sklearn import linear_model
 import numpy as np
 
+decimal_points = 6
+
 data = pd.read_csv('IPL IMB381IPL2013.csv')
 
 st.title("Sold Price Estimate for IPL Player")
@@ -47,7 +49,8 @@ try:
                  , help="Enter appropriate values to get linear regression"
                  )
     corr = data[option].corr(data[option_2])
-    st.write(f'Correlation of {option} and {option_2} is : ' + str(corr))
+    corr_fl = "{:.{}f}".format(corr, decimal_points)
+    st.write(f'Correlation of {option} and {option_2} is : ' + str(corr_fl))
 
     indep_var = pd.DataFrame(data[option])
     dep_var = pd.DataFrame(data[option_2])
@@ -55,25 +58,30 @@ try:
     lm = linear_model.LinearRegression()
     model = lm.fit(indep_var, dep_var)
 
-    st.write(f"Slope : {str(model.coef_[0][0])}. In the context of cricket player data, the slope\n"
+    coef_fl = "{:.{}f}".format(model.coef_[0][0], decimal_points)
+    st.write(f"Slope : {str(coef_fl)}. In the context of cricket player data, the slope\n"
              f" in a linear regression model represents the change in the\n"
              f" dependent variable ({option_2}) for a one-unit \n"
              f" change in the independent variable ({option})"
              )
 
-    st.write("Intercept : " + str(model.intercept_[0]) +
+    coef_intercp = "{:.{}f}".format(model.intercept_[0], decimal_points)
+    st.write("Intercept : " + str(coef_intercp) +
              (" The intercept in a linear regression model is the predicted "
               "value of the dependent variable when the \n"
               "independent variable is zero"))
 
-    st.write("R-Square value for the model : " + str(model.score(indep_var, dep_var)))
+    rsq_fl = "{:.{}f}".format(model.score(indep_var, dep_var), decimal_points)
+    st.write("R-Square value for the model : " + str(rsq_fl))
 
     indep_var_txt = st.text_input(f"Input {option} to predict {option_2} :")
     indep_var_new = np.array([int(indep_var_txt)])
     indep_var_new = indep_var_new.reshape(-1, 1)
     dep_var_new = model.predict(indep_var_new)
+
+    dep_var_n_fl = "{:.{}f}".format(dep_var_new[0][0], 3)
     st.info(f"The predicted value of {option_2} on the basis "
-            f"of {option} is " + str(dep_var_new[0][0]))
+            f"of {option} is " + str(dep_var_n_fl))
 
     indep_var_int = int(indep_var_txt)
     X = ([indep_var_int / 2, indep_var_int * 2, indep_var_int * 5])
