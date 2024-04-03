@@ -2,6 +2,8 @@ import pandas as pd
 import streamlit as st
 from sklearn import linear_model
 import numpy as np
+import plotly.express as px
+import statsmodels.api as sm
 
 decimal_points = 6
 
@@ -90,6 +92,14 @@ try:
     Y = pd.DataFrame(Y)
     df = pd.concat([X, Y], axis=1, keys=[option, f"{option_2} predicted"])
     st.write(df)
+
+    non_num_col = data.select_dtypes(exclude=np.number).columns.tolist()
+    non_num_col.remove('PLAYER NAME')
+    option_col = st.selectbox("Select data to be shown by its colour hue in the graph", non_num_col,
+                              key="regChart")
+
+    fig = px.scatter(data, x=option, y=option_2, color=option_col, trendline="ols")
+    st.plotly_chart(fig)
 
 except ValueError:
     st.info("Cannot find regression between the selected values")
