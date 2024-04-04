@@ -11,7 +11,7 @@ data = pd.read_csv('IPL IMB381IPL2013.csv')
 
 st.title("Sold Price Estimate for IPL Player")
 
-with st.expander("About this app"):
+with st.expander("About this app 🏏"):
     st.write("""
         Get in the IPL spirit this season by playing around with
         this fun app! Predict any feature for e.g. the number of sixers
@@ -37,9 +37,7 @@ col = ["SOLD PRICE", "AGE", "COUNTRY", "TEAM", "T-RUNS", "T-WKTS",
 option = st.selectbox("Select data used to predict", col,
                       key="main_op")
 
-pop_var = col.index(option)
-
-col.pop(pop_var)
+col.remove(option)
 
 option_2 = st.selectbox("Select data to be predicted", col,
                         key="main_op_2")
@@ -47,9 +45,8 @@ option_2 = st.selectbox("Select data to be predicted", col,
 # linear regression
 
 try:
-    st.subheader(f"Here is the linear regression of {option} and {option_2} for all players."
-                 , help="Enter appropriate values to get linear regression"
-                 )
+    st.subheader(f"Here is the linear regression of {option} and {option_2} for all players.")
+
     corr = data[option].corr(data[option_2])
     corr_fl = "{:.{}f}".format(corr, decimal_points)
     st.write(f'Correlation of {option} and {option_2} is : ' + str(corr_fl))
@@ -76,7 +73,15 @@ try:
     rsq_fl = "{:.{}f}".format(model.score(indep_var, dep_var), decimal_points)
     st.write("R-Square value for the model : " + str(rsq_fl))
 
-    indep_var_txt = st.text_input(f"Input {option} to predict {option_2} :")
+except ValueError:
+    st.info("Cannot find regression between the selected types "
+            "of data",
+            icon="😵")
+
+try:
+    indep_var_txt = st.text_input(f"Input {option} to predict {option_2} :",
+                                  help="Enter appropriate values to get linear"
+                                       " regression")
     indep_var_new = np.array([int(indep_var_txt)])
     indep_var_new = indep_var_new.reshape(-1, 1)
     dep_var_new = model.predict(indep_var_new)
@@ -84,7 +89,6 @@ try:
     dep_var_n_fl = "{:.{}f}".format(dep_var_new[0][0], 3)
     st.info(f"The predicted value of {option_2} on the basis "
             f"of {option} is " + str(dep_var_n_fl))
-
     indep_var_int = int(indep_var_txt)
     X = ([indep_var_int / 2, indep_var_int * 2, indep_var_int * 5])
     X = pd.DataFrame(X)
@@ -93,16 +97,21 @@ try:
     df = pd.concat([X, Y], axis=1, keys=[option, f"{option_2} predicted"])
     st.write(df)
 
-    non_num_col = data.select_dtypes(exclude=np.number).columns.tolist()
-    non_num_col.remove('PLAYER NAME')
-    option_col = st.selectbox("Select data to be shown by its colour hue in the graph", non_num_col,
+except ValueError:
+    st.info("Please enter a value in the box above or select appropriate"
+            " data types to get linear regression",
+            icon="🙀")
+
+plyrRole = ['Allrounder', 'Batsman', 'Bowler', "W. Keeper"]
+
+plyrRole_col = st.multiselect("Select playing role by which the player stats are to"
+                              " be shown in the graph", plyrRole,
                               key="regChart")
 
-    fig = px.scatter(data, x=option, y=option_2, color=option_col, trendline="ols")
-    st.plotly_chart(fig)
+df_1 = data[data['PLAYING ROLE'].isin(plyrRole_col)]
 
-except ValueError:
-    st.info("Cannot find regression between the selected values")
+fig = px.scatter(df_1, x=option, y=option_2, color='PLAYING ROLE', trendline="ols")
+st.plotly_chart(fig)
 
 # st.page_link("pages/Player_List.py",
 #             label="Click here to see the players list page along which"
@@ -110,16 +119,16 @@ except ValueError:
 #             icon="🏏")
 
 disclaimer = "When you make conclusions from data analysis, you need" \
-               " to make sure that you don’t assume a causal relationship" \
-               " between elements of your data when there is only a correlation." \
-               " When your data shows that outdoor temperature and ice cream" \
-               " consumption both go up at the same time, it might be tempting" \
-               " to conclude that hot weather causes people to eat ice cream." \
-               " But, a closer examination of the data would reveal that every" \
-               " change in temperature doesn’t lead to a change in ice cream" \
-               " purchases. In addition, there might have been a sale on ice" \
-               " cream at the same time that the data was collected, which" \
-               " might not have been considered in your analysis"
+             " to make sure that you don’t assume a causal relationship" \
+             " between elements of your data when there is only a correlation." \
+             " When your data shows that outdoor temperature and ice cream" \
+             " consumption both go up at the same time, it might be tempting" \
+             " to conclude that hot weather causes people to eat ice cream." \
+             " But, a closer examination of the data would reveal that every" \
+             " change in temperature doesn’t lead to a change in ice cream" \
+             " purchases. In addition, there might have been a sale on ice" \
+             " cream at the same time that the data was collected, which" \
+             " might not have been considered in your analysis"
 
 with st.expander("Disclaimer"):
     st.warning(disclaimer)
