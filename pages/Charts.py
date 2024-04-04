@@ -4,7 +4,7 @@ import plotly.express as px
 import numpy as np
 import plotly.figure_factory as ff
 
-data = pd.read_csv('IPL IMB381IPL2013.csv')
+data = pd.read_csv('csv files/IPL IMB381IPL2013.csv')
 
 # get numeric columns
 num_col = data.select_dtypes(include=np.number).columns.tolist()

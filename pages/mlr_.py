@@ -6,7 +6,7 @@ st.title("Multiple linear regression (Beta)")
 
 prompt = 'Select a categorical i.e. non-numeric data.'
 
-data = pd.read_csv('IPL IMB381IPL2013.csv')
+data = pd.read_csv('csv files/IPL IMB381IPL2013.csv')
 
 col_mlr = ["COUNTRY", "TEAM", "PLAYING ROLE", "AGE",
        "CAPTAINCY EXP", "AUCTION YEAR"]

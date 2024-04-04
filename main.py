@@ -7,7 +7,7 @@ import statsmodels.api as sm
 
 decimal_points = 6
 
-data = pd.read_csv('IPL IMB381IPL2013.csv')
+data = pd.read_csv('csv files/IPL IMB381IPL2013.csv')
 
 st.title("Sold Price Estimate for IPL Player")
 

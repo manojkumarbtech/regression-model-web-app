@@ -3,7 +3,7 @@ import pandas as pd
 
 prompt_1 = "Enter player name for e.g. Jasprit Bumrah"
 
-filepath_player_auc = 'IPL_2023-22_Sold_Players.csv'
+filepath_player_auc = 'csv files/IPL_2023-22_Sold_Players.csv'
 
 # define default player
 player_def = "Virat Kohli"
@@ -11,50 +11,50 @@ player_def = "Virat Kohli"
 player = st.text_input(label=prompt_1, value=player_def)
 
 stats_op = st.selectbox(f"Select the stats you want to see of {player}",
-                          ('Batting Stats', 'Bowling Stats'), key='stats_op')
+                        ('Batting Stats', 'Bowling Stats'), key='stats_op')
 
 # define select-box items
-col_pl =[]
+col_pl = []
 
 # define filepath for player stats
 filepath_cric = ""
 
-# load player role and auction data
-data_1 = pd.read_csv(filepath_player_auc)
+try:
+    # load player role and auction data
+    data_1 = pd.read_csv(filepath_player_auc)
+except FileNotFoundError:
+    st.warning("Woah there! pardner")
 
 filtered_data = data_1[['AUCTION YEAR', 'Name', 'Type']]
 
-try:
-    if player:
-        # Get the player data
-        try:
-            player_role = filtered_data.loc[filtered_data['Name'].str.strip() == player, 'Type'].values[0]
-        except IndexError:
-            st.info(player + " might not have been auctioned.")
-            player_role = 'player'
+if player:
+    # Get the player data
+    try:
+        player_role = filtered_data.loc[filtered_data['Name'].str.strip() == player, 'Type'].values[0]
+    except IndexError:
+        st.info(player + " might not have been auctioned.")
+        player_role = 'player'
 
-        if 'Batting Stats' == stats_op:
-            # display batting stats of the player
-            col_pl = ["POS", "Player", "Mat", "Inns", "NO", "Runs",
-                      "HS", "Avg", "BF", "SR", "100", "50", "4s", "6s"
-                      ]
+    if 'Batting Stats' == stats_op:
+        # display batting stats of the player
+        col_pl = ["POS", "Player", "Mat", "Inns", "NO", "Runs",
+                  "HS", "Avg", "BF", "SR", "100", "50", "4s", "6s"
+                  ]
 
-            filepath_cric = "BATTING STATS - IPL_2022.csv"
+        filepath_cric = "csv files/BATTING STATS - IPL_2022.csv"
 
-        if 'Bowling Stats' == stats_op:
-            # display bowling stats of the player
-            col_pl = ["POS", "Player", "Mat", "Inns", "Ov", "Runs", "Wkts",
-                      "BBI", "Avg", "Econ", "SR", "4w", "5w"
-                      ]
+    if 'Bowling Stats' == stats_op:
+        # display bowling stats of the player
+        col_pl = ["POS", "Player", "Mat", "Inns", "Ov", "Runs", "Wkts",
+                  "BBI", "Avg", "Econ", "SR", "4w", "5w"
+                  ]
 
-            filepath_cric = "BOWLING STATS - IPL_2022.csv"
+        filepath_cric = "csv files/BOWLING STATS - IPL_2022.csv"
 
 # except IndexError:
 #     st.info(player + " might not have been auctioned.")
 #     player_role = 'player'
 
-except FileNotFoundError:
-    st.warning("Woah there! pardner")
 
 try:
     data = pd.read_csv(filepath_cric)
