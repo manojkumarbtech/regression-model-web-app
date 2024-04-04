@@ -45,7 +45,8 @@ option_2 = st.selectbox("Select data to be predicted", col,
 # linear regression
 
 try:
-    st.subheader(f"Here is the linear regression of {option} and {option_2} for all players.")
+    st.subheader(f"Here is the linear regression of {option} and {option_2}"
+                 f" for all players.")
 
     corr = data[option].corr(data[option_2])
     corr_fl = "{:.{}f}".format(corr, decimal_points)
@@ -101,6 +102,9 @@ except ValueError:
     st.info("Please enter a value in the box above or select appropriate"
             " data types to get linear regression",
             icon="🙀")
+except NameError:
+    st.warning("Please select appropriate data types to get linear regression",
+            icon="🐍")
 
 plyrRole = ['Allrounder', 'Batsman', 'Bowler', "W. Keeper"]
 
