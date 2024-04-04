@@ -25,12 +25,15 @@ try:
 except FileNotFoundError:
     st.warning("Woah there! pardner")
 
-filtered_data = data_1[['AUCTION YEAR', 'Name', 'Type']]
+filtered_data = data_1[['AUCTION YEAR', 'Name', 'Type', 'Price']]
 
 if player:
     # Get the player data
     try:
         player_role = filtered_data.loc[filtered_data['Name'].str.strip() == player, 'Type'].values[0]
+        player_auc_price = filtered_data.loc[filtered_data['Name'].str.strip() == player, 'Price'].values[0]
+        st.info(player + f"`s compensation was INR {player_auc_price}.")
+
     except IndexError:
         st.info(player + " might not have been auctioned.")
         player_role = 'player'
