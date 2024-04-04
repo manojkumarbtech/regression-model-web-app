@@ -1,9 +1,9 @@
+import numpy as np
 import pandas as pd
+import plotly.express as px
 import streamlit as st
 from sklearn import linear_model
-import numpy as np
-import plotly.express as px
-import statsmodels.api as sm
+import statsmodels
 
 decimal_points = 6
 
