@@ -103,22 +103,26 @@ except ValueError:
             " data types to get linear regression",
             icon="🙀")
 except NameError:
-    st.info("Please select appropriate data types to get linear regression",
-            icon="🚓")
+    st.info("Please select numerical data to get linear regression",
+            icon="⛈️")
 
 plyrRole = ['Allrounder', 'Batsman', 'Bowler', "W. Keeper"]
 
 plyrRole_col = st.multiselect("Select playing role by which the player stats are to"
                               " be shown in the graph", plyrRole,
-                              key="regChart")
+                              key="regChart", default=plyrRole)
 
 try:
     df_1 = data[data['PLAYING ROLE'].isin(plyrRole_col)]
 
     fig = px.scatter(df_1, x=option, y=option_2, color='PLAYING ROLE', trendline="ols")
     st.plotly_chart(fig)
+    fig_scat = px.scatter(df_1, x=option, y=option_2,
+                     size="SOLD PRICE", color="PLAYING ROLE",
+                     hover_name="COUNTRY", log_x=True, size_max=60)
+    st.plotly_chart(fig_scat)
 except ValueError:
-    st.info("Please select appropriate data types to get linear regression",
+    st.info("Please select appropriate data types to get the graph",
             icon="🚓")
 
 # st.page_link("pages/Player_List.py",
