@@ -9,7 +9,7 @@ decimal_points = 6
 
 data = pd.read_csv('csv files/IPL IMB381IPL2013.csv')
 
-st.title("Sold Price Estimate for IPL Player")
+st.title("Sold Price Estimator for IPL Player")
 
 with st.expander("About this app 🏏"):
     st.write("""
@@ -23,7 +23,7 @@ with st.expander("About this app 🏏"):
           to the observed data
         """)
 
-st.page_link("pages/Charts.py",
+st.page_link("pages/charts.py",
              label="Click here to see Data Viz",
              icon="📈")
 
@@ -89,7 +89,7 @@ with clmn2:
     except NameError:
         st.info("Cannot find regression between the selected types "
                 "of data",
-                icon="😵")
+                icon="🏏")
 
     try:
         indep_var_txt = st.text_input(f"Input {option} to predict {option_2} :",
@@ -138,7 +138,7 @@ except ValueError:
     st.info("Please select appropriate data types to get the graph",
             icon="🚓")
 
-# st.page_link("pages/Player_List.py",
+# st.page_link("pages/player_list.py",
 #             label="Click here to see the players list page along which"
 #                   " the model is aligned",
 #             icon="🏏")
