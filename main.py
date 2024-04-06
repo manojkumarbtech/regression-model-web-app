@@ -32,9 +32,9 @@ st.page_link("pages/Charts.py",
 clmn1, clmn2 = st.columns(2)
 
 with clmn1:
-    col = ["SOLD PRICE", "AGE", "COUNTRY", "TEAM", "T-RUNS", "T-WKTS",
+    col = ["SOLD PRICE", "SIXERS", "AGE", "COUNTRY", "TEAM", "T-RUNS", "T-WKTS",
            "ODI-RUNS-S", "ODI-SR-B", "ODI-WKTS", "ODI-SR-BL", "CAPTAINCY EXP",
-           "RUNS-S", "HS", "AVE", "SR-B", "SIXERS", "RUNS-C", "WKTS",
+           "RUNS-S", "HS", "AVE", "SR-B", "RUNS-C", "WKTS",
            "AVE-BL", "ECON", "SR-BL", "AUCTION YEAR", "BASE PRICE"]
 
     option = st.selectbox("Select data used to predict", col,
