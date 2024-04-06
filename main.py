@@ -29,82 +29,94 @@ st.page_link("pages/Charts.py",
 
 # Categories to show in dropdown menu
 
-col = ["SOLD PRICE", "AGE", "COUNTRY", "TEAM", "T-RUNS", "T-WKTS",
-       "ODI-RUNS-S", "ODI-SR-B", "ODI-WKTS", "ODI-SR-BL", "CAPTAINCY EXP",
-       "RUNS-S", "HS", "AVE", "SR-B", "SIXERS", "RUNS-C", "WKTS",
-       "AVE-BL", "ECON", "SR-BL", "AUCTION YEAR", "BASE PRICE"]
+clmn1, clmn2 = st.columns(2)
 
-option = st.selectbox("Select data used to predict", col,
-                      key="main_op")
+with clmn1:
+    col = ["SOLD PRICE", "AGE", "COUNTRY", "TEAM", "T-RUNS", "T-WKTS",
+           "ODI-RUNS-S", "ODI-SR-B", "ODI-WKTS", "ODI-SR-BL", "CAPTAINCY EXP",
+           "RUNS-S", "HS", "AVE", "SR-B", "SIXERS", "RUNS-C", "WKTS",
+           "AVE-BL", "ECON", "SR-BL", "AUCTION YEAR", "BASE PRICE"]
 
-col.remove(option)
+    option = st.selectbox("Select data used to predict", col,
+                          key="main_op")
 
-option_2 = st.selectbox("Select data to be predicted", col,
-                        key="main_op_2")
+    col.remove(option)
 
-# linear regression
+    option_2 = st.selectbox("Select data to be predicted", col,
+                            key="main_op_2")
 
-try:
-    st.subheader(f"Here is the linear regression of {option} and {option_2}"
-                 f" for all players.")
+    # linear regression
 
-    corr = data[option].corr(data[option_2])
-    corr_fl = "{:.{}f}".format(corr, decimal_points)
-    st.write(f'Correlation of {option} and {option_2} is : ' + str(corr_fl))
+    try:
+        indep_var = pd.DataFrame(data[option])
+        dep_var = pd.DataFrame(data[option_2])
 
-    indep_var = pd.DataFrame(data[option])
-    dep_var = pd.DataFrame(data[option_2])
+        lm = linear_model.LinearRegression()
+        model = lm.fit(indep_var, dep_var)
 
-    lm = linear_model.LinearRegression()
-    model = lm.fit(indep_var, dep_var)
+        st.subheader(f"🤓 The linear regression of {option} and {option_2}"
+                     f" for all players.")
 
-    coef_fl = "{:.{}f}".format(model.coef_[0][0], decimal_points)
-    st.write(f"Slope : {str(coef_fl)}. In the context of cricket player data, the slope\n"
-             f" in a linear regression model represents the change in the\n"
-             f" dependent variable ({option_2}) for a one-unit \n"
-             f" change in the independent variable ({option})"
-             )
+        corr = data[option].corr(data[option_2])
+        corr_fl = "{:.{}f}".format(corr, decimal_points)
+        st.write(f'Correlation of {option} and {option_2} is : ' + str(corr_fl))
 
-    coef_intercp = "{:.{}f}".format(model.intercept_[0], decimal_points)
-    st.write("Intercept : " + str(coef_intercp) +
-             (" The intercept in a linear regression model is the predicted "
-              "value of the dependent variable when the \n"
-              "independent variable is zero"))
+        coef_fl = "{:.{}f}".format(model.coef_[0][0], decimal_points)
+        st.write(f"Slope : {str(coef_fl)}. In the context of cricket player data, the slope\n"
+                 f" in a linear regression model represents the change in the\n"
+                 f" dependent variable ({option_2}) for a one-unit \n"
+                 f" change in the independent variable ({option})"
+                 )
 
-    rsq_fl = "{:.{}f}".format(model.score(indep_var, dep_var), decimal_points)
-    st.write("R-Square value for the model : " + str(rsq_fl))
+    except ValueError:
+        pass
 
-except ValueError:
-    st.info("Cannot find regression between the selected types "
-            "of data",
-            icon="😵")
+with clmn2:
+    try:
+        coef_intercp = "{:.{}f}".format(model.intercept_[0], decimal_points)
+        st.write("Intercept : " + str(coef_intercp) +
+                 (" The intercept in a linear regression model is the predicted "
+                  "value of the dependent variable when the \n"
+                  "independent variable is zero"))
 
-try:
-    indep_var_txt = st.text_input(f"Input {option} to predict {option_2} :",
-                                  help="Enter appropriate values to get linear"
-                                       " regression")
-    indep_var_new = np.array([int(indep_var_txt)])
-    indep_var_new = indep_var_new.reshape(-1, 1)
-    dep_var_new = model.predict(indep_var_new)
+        rsq_fl = "{:.{}f}".format(model.score(indep_var, dep_var), decimal_points)
+        st.write("R-Square value for the model : " + str(rsq_fl))
 
-    dep_var_n_fl = "{:.{}f}".format(dep_var_new[0][0], 3)
-    st.info(f"The predicted value of {option_2} on the basis "
-            f"of {option} is " + str(dep_var_n_fl))
-    indep_var_int = int(indep_var_txt)
-    X = ([indep_var_int / 2, indep_var_int * 2, indep_var_int * 5])
-    X = pd.DataFrame(X)
-    Y = model.predict(X)
-    Y = pd.DataFrame(Y)
-    df = pd.concat([X, Y], axis=1, keys=[option, f"{option_2} predicted"])
-    st.write(df)
+    except ValueError:
+        st.info("Cannot find regression between the selected types "
+                "of data",
+                icon="😵")
+    except NameError:
+        st.info("Cannot find regression between the selected types "
+                "of data",
+                icon="😵")
 
-except ValueError:
-    st.info("Please enter a value in the box above or select appropriate"
-            " data types to get linear regression",
-            icon="🙀")
-except NameError:
-    st.info("Please select numerical data to get linear regression",
-            icon="⛈️")
+    try:
+        indep_var_txt = st.text_input(f"Input {option} to predict {option_2} :",
+                                      help="Enter appropriate values to get linear"
+                                           " regression")
+        indep_var_new = np.array([int(indep_var_txt)])
+        indep_var_new = indep_var_new.reshape(-1, 1)
+        dep_var_new = model.predict(indep_var_new)
+
+        dep_var_n_fl = "{:.{}f}".format(dep_var_new[0][0], 3)
+        st.info(f"The predicted value of {option_2} on the basis "
+                f"of {option} is " + str(dep_var_n_fl))
+        indep_var_int = int(indep_var_txt)
+        X = ([indep_var_int / 2, indep_var_int * 2, indep_var_int * 5])
+        X = pd.DataFrame(X)
+        Y = model.predict(X)
+        Y = pd.DataFrame(Y)
+        df = pd.concat([X, Y], axis=1, keys=[option, f"{option_2} predicted"])
+        st.write(df)
+
+    except ValueError:
+        st.info("Please enter a value in the box above or select appropriate"
+                " data types to get linear regression",
+                icon="🙀")
+    except NameError:
+        st.info("Please select numerical data to get linear regression",
+                icon="⛈️")
 
 plyrRole = ['Allrounder', 'Batsman', 'Bowler', "W. Keeper"]
 
@@ -118,9 +130,10 @@ try:
     fig = px.scatter(df_1, x=option, y=option_2, color='PLAYING ROLE', trendline="ols")
     st.plotly_chart(fig)
     fig_scat = px.scatter(df_1, x=option, y=option_2,
-                     size="SOLD PRICE", color="PLAYING ROLE",
-                     hover_name="COUNTRY", log_x=True, size_max=60)
+                          size="SOLD PRICE", color="PLAYING ROLE",
+                          hover_name="COUNTRY", log_x=True, size_max=60)
     st.plotly_chart(fig_scat)
+
 except ValueError:
     st.info("Please select appropriate data types to get the graph",
             icon="🚓")
