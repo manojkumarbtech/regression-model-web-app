@@ -8,9 +8,11 @@ filepath_player_auc = 'csv files/IPL_2023-22_Sold_Players.csv'
 # define default player
 player_def = "Virat Kohli"
 
-player = st.text_input(label=prompt_1, value=player_def)
+
 
 with st.sidebar:
+    player = st.text_input(label=prompt_1, value=player_def)
+
     stats_op = st.selectbox(f"Select the stats you want to see of {player}",
                         ('Batting Stats', 'Bowling Stats'), key='stats_op')
 

@@ -78,20 +78,25 @@ with st.container():
                      f" indicating {option_col} by colour intensity.")
         for chart in chart_op:
             if chart == 'Bar':
-                st.bar_chart(data, x=option, y=option_2, color=option_col)
+                st.bar_chart(data, x=option, y=option_2, color=option_col,
+                             use_container_width=True)
             if chart == 'Scatter':
-                st.scatter_chart(data, x=option, y=option_2, color=option_col)
+                st.scatter_chart(data, x=option, y=option_2, color=option_col,
+                                 use_container_width=True)
             if chart == 'Plotly':
                 fig = px.scatter(data, x=option, y=option_2, color=option_col)
-                st.plotly_chart(fig)
+                st.plotly_chart(fig, use_container_width=True)
+
                 fig_2 = px.bar(data, x=option, y=option_2, color=option_col)
-                st.plotly_chart(fig_2)
+                st.plotly_chart(fig_2, use_container_width=True)
+
             if chart == 'Density Plot':
                 fig = px.histogram(data[data['PLAYING ROLE'].isin(plyrRole_col)],
                                    x=option, color='PLAYING ROLE')
-                st.plotly_chart(fig)
+                st.plotly_chart(fig, use_container_width=True)
+
                 fig_ff = ff.create_distplot(dfs, group_labels=plyrRole_col)
-                st.plotly_chart(fig_ff)
+                st.plotly_chart(fig_ff, use_container_width=True)
 
             # chart not ready
             # if chart == 'Altair':

@@ -133,11 +133,12 @@ with st.container():
 
         fig = px.scatter(df_1, x=option, y=option_2,
                          color='PLAYING ROLE', trendline="ols")
-        st.plotly_chart(fig)
+        st.plotly_chart(fig, use_container_width=True)
         fig_scat = px.scatter(df_1, x=option, y=option_2,
                               size="SOLD PRICE", color="PLAYING ROLE",
-                              hover_name="COUNTRY", log_x=True, size_max=60)
-        st.plotly_chart(fig_scat)
+                              hover_name="COUNTRY", log_x=True, size_max=60
+                              )
+        st.plotly_chart(fig_scat, use_container_width=True)
 
     except ValueError:
         st.info("Please select appropriate data types to get the graph",

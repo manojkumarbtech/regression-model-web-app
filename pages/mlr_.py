@@ -15,18 +15,19 @@ col_num = ["T-RUNS", "T-WKTS", "AGE", "ODI-RUNS-S", "ODI-SR-B", "ODI-WKTS", "ODI
            "CAPTAINCY EXP", "RUNS-S", "HS", "AVE", "SR-B", "SIXERS", "RUNS-C", "WKTS",
            "AVE-BL", "ECON", "SR-BL", "AUCTION YEAR", "BASE PRICE", "SOLD PRICE"]
 
-heatmap_op_1 = st.selectbox('Select Features you want to see on horizonatal axis of the heatmap', col_mlr,
-                            key='heatmap_x', help=prompt)
+with st.sidebar:
+    heatmap_op_1 = st.selectbox('Select Features you want to see on horizonatal axis of the heatmap', col_mlr,
+                                key='heatmap_x', help=prompt)
 
-pop_var = col_mlr.index(heatmap_op_1)
+    pop_var = col_mlr.index(heatmap_op_1)
 
-col_mlr.pop(pop_var)
+    col_mlr.pop(pop_var)
 
-heatmap_op_2 = st.selectbox('Select Features you want to see on vertical axis of the heatmap', col_mlr,
-                            key='heatmap_y', help=prompt)
+    heatmap_op_2 = st.selectbox('Select Features you want to see on vertical axis of the heatmap', col_mlr,
+                                key='heatmap_y', help=prompt)
 
-heatmap_op_num = st.selectbox('Select data to to be shown by its colour intensity in the heatmap', col_num,
-                              key='heatmap_z')
+    heatmap_op_num = st.selectbox('Select data to to be shown by its colour intensity in the heatmap', col_num,
+                                  key='heatmap_z')
 
 try:
     df = data.pivot_table(index=heatmap_op_2, columns=heatmap_op_1, values=heatmap_op_num)
