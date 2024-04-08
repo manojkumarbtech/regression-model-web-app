@@ -10,7 +10,8 @@ player_def = "Virat Kohli"
 
 player = st.text_input(label=prompt_1, value=player_def)
 
-stats_op = st.selectbox(f"Select the stats you want to see of {player}",
+with st.sidebar:
+    stats_op = st.selectbox(f"Select the stats you want to see of {player}",
                         ('Batting Stats', 'Bowling Stats'), key='stats_op')
 
 # define select-box items
@@ -65,11 +66,12 @@ except FileNotFoundError:
     st.warning("Woah there! pardner")
 
 try:
-    option = st.selectbox("Select data to view for the specific player", col_pl,
-                          key='player_op')
+    with st.sidebar:
+        option = st.selectbox("Select data to view for the specific player", col_pl,
+                              key='player_op')
 
-    option_2 = st.selectbox("Select data to view for the specific player", col_pl,
-                            key='player_op_2')
+        option_2 = st.selectbox("Select data to view for the specific player", col_pl,
+                                key='player_op_2')
 
     player_value = data.loc[data['Player'] == player, (option, option_2)].values[0]
     st.info(f"{player} is a {player_role} whose {option} is/are {player_value[0]} " +

@@ -7,6 +7,13 @@ import statsmodels
 
 decimal_points = 6
 
+col = ["SOLD PRICE", "SIXERS", "AGE", "COUNTRY", "TEAM", "T-RUNS", "T-WKTS",
+           "ODI-RUNS-S", "ODI-SR-B", "ODI-WKTS", "ODI-SR-BL", "CAPTAINCY EXP",
+           "RUNS-S", "HS", "AVE", "SR-B", "RUNS-C", "WKTS",
+           "AVE-BL", "ECON", "SR-BL", "AUCTION YEAR", "BASE PRICE"]
+
+plyrRole = ['Allrounder', 'Batsman', 'Bowler', "W. Keeper"]
+
 data = pd.read_csv('csv files/IPL IMB381IPL2013.csv')
 
 st.title("Sold Price Estimator for IPL Player")
@@ -31,11 +38,7 @@ st.page_link("pages/charts.py",
 
 clmn1, clmn2 = st.columns(2)
 
-with clmn1:
-    col = ["SOLD PRICE", "SIXERS", "AGE", "COUNTRY", "TEAM", "T-RUNS", "T-WKTS",
-           "ODI-RUNS-S", "ODI-SR-B", "ODI-WKTS", "ODI-SR-BL", "CAPTAINCY EXP",
-           "RUNS-S", "HS", "AVE", "SR-B", "RUNS-C", "WKTS",
-           "AVE-BL", "ECON", "SR-BL", "AUCTION YEAR", "BASE PRICE"]
+with st.sidebar:
 
     option = st.selectbox("Select data used to predict", col,
                           key="main_op")
@@ -45,6 +48,11 @@ with clmn1:
     option_2 = st.selectbox("Select data to be predicted", col,
                             key="main_op_2")
 
+    plyrRole_col = st.multiselect("Select playing role by which the player stats are to"
+                                  " be shown in the graph", plyrRole,
+                                  key="regChart", default=plyrRole)
+
+with clmn1:
     # linear regression
 
     try:
@@ -118,25 +126,22 @@ with clmn2:
         st.info("Please select numerical data to get linear regression",
                 icon="⛈️")
 
-plyrRole = ['Allrounder', 'Batsman', 'Bowler', "W. Keeper"]
 
-plyrRole_col = st.multiselect("Select playing role by which the player stats are to"
-                              " be shown in the graph", plyrRole,
-                              key="regChart", default=plyrRole)
+with st.container():
+    try:
+        df_1 = data[data['PLAYING ROLE'].isin(plyrRole_col)]
 
-try:
-    df_1 = data[data['PLAYING ROLE'].isin(plyrRole_col)]
+        fig = px.scatter(df_1, x=option, y=option_2,
+                         color='PLAYING ROLE', trendline="ols")
+        st.plotly_chart(fig)
+        fig_scat = px.scatter(df_1, x=option, y=option_2,
+                              size="SOLD PRICE", color="PLAYING ROLE",
+                              hover_name="COUNTRY", log_x=True, size_max=60)
+        st.plotly_chart(fig_scat)
 
-    fig = px.scatter(df_1, x=option, y=option_2, color='PLAYING ROLE', trendline="ols")
-    st.plotly_chart(fig)
-    fig_scat = px.scatter(df_1, x=option, y=option_2,
-                          size="SOLD PRICE", color="PLAYING ROLE",
-                          hover_name="COUNTRY", log_x=True, size_max=60)
-    st.plotly_chart(fig_scat)
-
-except ValueError:
-    st.info("Please select appropriate data types to get the graph",
-            icon="🚓")
+    except ValueError:
+        st.info("Please select appropriate data types to get the graph",
+                icon="🚓")
 
 # st.page_link("pages/player_list.py",
 #             label="Click here to see the players list page along which"
