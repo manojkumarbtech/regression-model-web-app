@@ -49,8 +49,10 @@ with st.sidebar:
                             key="main_op_2")
 
     plyrRole_col = st.multiselect("Select playing role for which the player stats are to"
-                                  " aligned in regression and shown in the graph", plyrRole,
-                                  key="regChart", default=plyrRole)
+                                  " be aligned in regression and shown in the graph",
+                                  plyrRole,
+                                  key="regChart",
+                                  default=plyrRole)
 
     if len(plyrRole_col) == 0:
         plyrRole_col = plyrRole
@@ -172,5 +174,3 @@ disclaimer = "When you make conclusions from data analysis, you need" \
 with st.expander("Disclaimer"):
     st.warning(disclaimer)
 
-# Unresolved Issue: Column List not popping for main and charts pages
-# Issue Resolved / Reason: Col list pop. push updates to streamlit may take some time to go live
