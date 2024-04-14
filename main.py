@@ -16,7 +16,7 @@ plyrRole = ['Allrounder', 'Batsman', 'Bowler', "W. Keeper"]
 
 data = pd.read_csv('csv files/IPL IMB381IPL2013.csv')
 
-st.title("Sold Price Estimator for IPL Player")
+st.title("Sold Price Analytics for IPL Player")
 
 with st.expander("About this app 🏏"):
     st.write("""
@@ -48,24 +48,31 @@ with st.sidebar:
     option_2 = st.selectbox("Select data to be predicted", col,
                             key="main_op_2")
 
-    plyrRole_col = st.multiselect("Select playing role by which the player stats are to"
-                                  " be shown in the graph", plyrRole,
+    plyrRole_col = st.multiselect("Select playing role for which the player stats are to"
+                                  " aligned in regression and shown in the graph", plyrRole,
                                   key="regChart", default=plyrRole)
+
+    if len(plyrRole_col) == 0:
+        plyrRole_col = plyrRole
+        st.info("If no playing role is selected, all the playing"
+                " roles are taken for regression as default",
+                icon="🧞")
 
 with clmn1:
     # linear regression
 
     try:
-        indep_var = pd.DataFrame(data[option])
-        dep_var = pd.DataFrame(data[option_2])
+        df_n = data[data['PLAYING ROLE'].isin(plyrRole_col)]
+        indep_var = pd.DataFrame(df_n[option])
+        dep_var = pd.DataFrame(df_n[option_2])
 
         lm = linear_model.LinearRegression()
         model = lm.fit(indep_var, dep_var)
 
-        st.subheader(f"🤓 The linear regression of {option} and {option_2}"
-                     f" for all players.")
+        st.subheader(f"🧙 The linear regression of {option} and {option_2} for "
+                     f"{', '.join(plyrRole_col)} playing role(s).")
 
-        corr = data[option].corr(data[option_2])
+        corr = df_n[option].corr(df_n[option_2])
         corr_fl = "{:.{}f}".format(corr, decimal_points)
         st.write(f'Correlation of {option} and {option_2} is : ' + str(corr_fl))
 
@@ -77,15 +84,16 @@ with clmn1:
                  )
 
     except ValueError:
-        pass
+        st.info("Please select a playing role",
+                icon="🙀")
 
 with clmn2:
     try:
         coef_intercp = "{:.{}f}".format(model.intercept_[0], decimal_points)
         st.write("Intercept : " + str(coef_intercp) +
                  (" The intercept in a linear regression model is the predicted "
-                  "value of the dependent variable when the \n"
-                  "independent variable is zero"))
+                  f"value of the dependent variable ({option_2}) when the \n"
+                  f"independent variable ({option}) is zero"))
 
         rsq_fl = "{:.{}f}".format(model.score(indep_var, dep_var), decimal_points)
         st.write("R-Square value for the model : " + str(rsq_fl))
@@ -121,7 +129,7 @@ with clmn2:
     except ValueError:
         st.info("Please enter a value in the box above or select appropriate"
                 " data types to get linear regression",
-                icon="🙀")
+                icon="🫠")
     except NameError:
         st.info("Please select numerical data to get linear regression",
                 icon="⛈️")

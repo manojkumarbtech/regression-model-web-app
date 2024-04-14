@@ -35,7 +35,7 @@ if player:
     try:
         player_role = filtered_data.loc[filtered_data['Name'].str.strip() == player, 'Type'].values[0]
         player_auc_price = filtered_data.loc[filtered_data['Name'].str.strip() == player, 'Price'].values[0]
-        st.info(player + f"`s compensation was INR {player_auc_price}.")
+        st.info(player + f"`s auction price was INR {player_auc_price}.")
 
     except IndexError:
         st.info(player + " might not have been auctioned.")
@@ -65,7 +65,8 @@ if player:
 try:
     data = pd.read_csv(filepath_cric)
 except FileNotFoundError:
-    st.warning("Woah there! pardner")
+    st.warning("Woah there! pardner",
+               icon='🤠')
 
 try:
     with st.sidebar:
