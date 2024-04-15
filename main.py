@@ -9,7 +9,7 @@ decimal_points = 6
 
 # Categories to show in dropdown menu
 
-col = ["SOLD PRICE", "SIXERS", "AGE", "COUNTRY", "TEAM", "T-RUNS", "T-WKTS",
+col = ["SOLD PRICE", "SIXERS", "AGE", "T-RUNS", "T-WKTS",
            "ODI-RUNS-S", "ODI-SR-B", "ODI-WKTS", "ODI-SR-BL", "CAPTAINCY EXP",
            "RUNS-S", "HS", "AVE", "SR-B", "RUNS-C", "WKTS",
            "AVE-BL", "ECON", "SR-BL", "AUCTION YEAR", "BASE PRICE"]
@@ -86,7 +86,8 @@ with clmn1:
                  )
 
     except ValueError:
-        st.info("Please select a playing role",
+        st.info("Cannot find regression between the selected types "
+                "of data",
                 icon="🙀")
 
 with clmn2:
