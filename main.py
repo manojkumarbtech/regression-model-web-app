@@ -7,6 +7,8 @@ import statsmodels
 
 decimal_points = 6
 
+# Categories to show in dropdown menu
+
 col = ["SOLD PRICE", "SIXERS", "AGE", "COUNTRY", "TEAM", "T-RUNS", "T-WKTS",
            "ODI-RUNS-S", "ODI-SR-B", "ODI-WKTS", "ODI-SR-BL", "CAPTAINCY EXP",
            "RUNS-S", "HS", "AVE", "SR-B", "RUNS-C", "WKTS",
@@ -33,8 +35,6 @@ with st.expander("About this app 🏏"):
 st.page_link("pages/charts.py",
              label="Click here to see Data Viz",
              icon="📈")
-
-# Categories to show in dropdown menu
 
 clmn1, clmn2 = st.columns(2)
 
