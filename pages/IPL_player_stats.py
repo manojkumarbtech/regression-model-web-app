@@ -27,18 +27,23 @@ def combine_df_season_cnt(df_list):
     df_season_count = df_season_count.rename(columns={"count": "Seasons"})
 
     # This concatenation will produce the actual total dataframe with unique entries for each player because of groupby
+    df_max = pd.concat(df_list).groupby(['Player']).max().reset_index()
+
     df_all = pd.concat(df_list).groupby(['Player']).sum().reset_index()
 
     # We merge the season count into the total dataframe to add the Season column
     df_all_with_season_count = df_all.merge(df_season_count, on='Player', how='left')
 
-    return df_all_with_season_count
+    return df_all_with_season_count, df_max
 
 
-def formatBattingCombined(df_batting_combined):
+def formatBattingCombined(df_batting_combined, df_batting_max):
     # Will divide average and Strike Rate by number of seasons to get the average of these metrics across all seasons
-    df_batting_combined['Avg'] = round(df_batting_combined['Avg'] / df_batting_combined['Seasons'], 2)
-    df_batting_combined['SR'] = round(df_batting_combined['SR'] / df_batting_combined['Seasons'], 2)
+
+    df_batting_combined['Avg'] = round(df_batting_combined['Runs'] / df_batting_combined['Inns'], 2)
+    df_batting_combined['SR'] = round(df_batting_combined['Runs'] / df_batting_combined['BF'] * 100, 2)
+    df_batting_combined['POS'] = round(df_batting_combined['POS'] / df_batting_combined['Seasons'], 2)
+    df_batting_combined['HS'] = df_batting_max['HS']
 
     return df_batting_combined
 
@@ -47,36 +52,10 @@ batting_file_path = "cleaned_datasets/Batting Stats"
 
 bowling_file_path = "cleaned_datasets/Bowling Stats"
 
-
-# All batting dataframes
-df_batting_2016 = load_data(batting_file_path, "batting_data_2016.csv")
-df_batting_2017 = load_data(batting_file_path, "batting_data_2017.csv")
-df_batting_2018 = load_data(batting_file_path, "batting_data_2018.csv")
-df_batting_2019 = load_data(batting_file_path, "batting_data_2019.csv")
-df_batting_2020 = load_data(batting_file_path, "batting_data_2020.csv")
-df_batting_2021 = load_data(batting_file_path, "batting_data_2021.csv")
-df_batting_2022 = load_data(batting_file_path, "batting_data_2022.csv")
-
-batting_list = [df_batting_2016,
-                df_batting_2017,
-                df_batting_2018,
-                df_batting_2019,
-                df_batting_2020,
-                df_batting_2021,
-                df_batting_2022
-                ]
-
 filtered_batting_list = []
 
-# All bowling dataframes
-df_bowling_2016 = load_data(bowling_file_path, "bowling_data_2016.csv")
-df_bowling_2017 = load_data(bowling_file_path, "bowling_data_2017.csv")
-df_bowling_2018 = load_data(bowling_file_path, "bowling_data_2018.csv")
-df_bowling_2019 = load_data(bowling_file_path, "bowling_data_2019.csv")
-df_bowling_2020 = load_data(bowling_file_path, "bowling_data_2020.csv")
-df_bowling_2021 = load_data(bowling_file_path, "bowling_data_2021.csv")
-df_bowling_2022 = load_data(bowling_file_path, "bowling_data_2022.csv")
-
+# bowling dataframes
+df_batting_2016 = load_data(batting_file_path, "batting_data_2016.csv")
 
 yr_list = st.slider("Select the years you want the data for",
                     value=(2016, 2022),
@@ -89,6 +68,15 @@ for yr in range(yr_list[0], yr_list[1] + 1):
     filtered_batting_list.append(load_data(batting_file_path,
                                            f"batting_data_{str(yr)}.csv"))
 
-df_1 = combine_df_season_cnt(filtered_batting_list)
-st.write(df_1)
+df_1, df_2 = combine_df_season_cnt(filtered_batting_list)
 
+df_3 = formatBattingCombined(df_1, df_2)
+
+st.write(df_3)
+
+df_most_runs = df_3.sort_values(by=['Runs'], ascending=False)[:25].copy()
+plt.figure(figsize=(20, 10))
+plt.title("25 Batsmen with highest career T20 Runs")
+ax = sns.barplot(x=df_most_runs["Runs"], y=df_most_runs["Player"], palette="husl")
+ax.set(ylabel="Player Name", xlabel="Runs Scored")
+st.pyplot(fig=plt)
