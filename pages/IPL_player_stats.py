@@ -26,7 +26,8 @@ def combine_df_season_cnt(df_list):
     # We will rename the columns for this dataframe to easily merge into the total dataframe
     df_season_count = df_season_count.rename(columns={"count": "Seasons"})
 
-    # This concatenation will produce the actual total dataframe with unique entries for each player because of groupby
+    # This concatenation will produce the actual total dataframe with unique
+    # entries for each player because of groupby
     df_max = pd.concat(df_list).groupby(['Player']).max().reset_index()
 
     df_all = pd.concat(df_list).groupby(['Player']).sum().reset_index()
@@ -50,12 +51,11 @@ def formatBattingCombined(df_batting_combined, df_batting_max):
 
 batting_file_path = "cleaned_datasets/Batting Stats"
 
-bowling_file_path = "cleaned_datasets/Bowling Stats"
+# bowling_file_path = "cleaned_datasets/Bowling Stats"
 
 filtered_batting_list = []
 
-# bowling dataframes
-df_batting_2016 = load_data(batting_file_path, "batting_data_2016.csv")
+# Insert page header here
 
 yr_list = st.slider("Select the years you want the data for",
                     value=(2016, 2022),
@@ -76,7 +76,7 @@ st.write(df_3)
 
 df_most_runs = df_3.sort_values(by=['Runs'], ascending=False)[:25].copy()
 plt.figure(figsize=(20, 10))
-plt.title("25 Batsmen with highest career T20 Runs")
+plt.title(f"25 Batsmen with highest T20 Runs in the period {yr_list[0]}-{yr_list[1]}")
 ax = sns.barplot(x=df_most_runs["Runs"], y=df_most_runs["Player"], palette="husl")
 ax.set(ylabel="Player Name", xlabel="Runs Scored")
 st.pyplot(fig=plt)
