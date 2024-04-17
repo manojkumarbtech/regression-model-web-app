@@ -18,13 +18,13 @@ plyrRole = ['Allrounder', 'Batsman', 'Bowler', "W. Keeper"]
 
 data = pd.read_csv('csv files/IPL IMB381IPL2013.csv')
 
-st.title("Sold Price Analytics for IPL Player")
+st.title("Auction Price Analytics for IPL Player")
 
 with st.expander("About this app 🏏"):
     st.write("""
         Get in the IPL spirit this season by playing around with
         this fun app! Predict any feature for e.g. the number of sixers
-        a player may hit using their base or sold price.
+        a player may hit using their base or auction price.
         """)
     st.info("""
         Linear regression is a statistical method used to understand the
