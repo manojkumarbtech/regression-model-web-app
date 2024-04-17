@@ -18,17 +18,19 @@ num_col.remove('SOLD PRICE')
 num_col.remove('ODI-RUNS-S')
 num_col.remove('T-RUNS')
 
-col_ch = ["COUNTRY", "TEAM", "PLAYING ROLE", "T-RUNS", "T-WKTS", "AGE",
-       "ODI-RUNS-S", "ODI-SR-B", "ODI-WKTS", "ODI-SR-BL", "CAPTAINCY EXP",
-       "RUNS-S", "HS", "AVE", "SR-B", "SIXERS", "RUNS-C", "WKTS",
-       "AVE-BL", "ECON", "SR-BL", "AUCTION YEAR", "BASE PRICE", "SOLD PRICE"]
+col_ch = ["COUNTRY", "ODI-RUNS-S", "ODI-SR-B", "T-WKTS", "AGE", "ODI-WKTS",
+          "TEAM", "PLAYING ROLE", "T-RUNS", "ODI-SR-BL", "CAPTAINCY EXP",
+          "RUNS-S", "HS", "AVE", "SR-B", "SIXERS", "RUNS-C", "WKTS",
+          "AVE-BL", "ECON", "SR-BL", "AUCTION YEAR", "BASE PRICE", "SOLD PRICE"]
 
 plyrRole = ['Allrounder', 'Batsman', 'Bowler', "W. Keeper"]
 
 with st.sidebar:
     plyrRole_col = st.multiselect("Select playing role by which the player stats are to"
-                              " be shown in the graph(s)", plyrRole, default='Allrounder',
-                              key="rolChart")
+                                  " be shown in the graph(s)",
+                                  plyrRole,
+                                  default='Allrounder',
+                                  key="rolChart")
 
 try:
     data = data_unf[data_unf['PLAYING ROLE'].isin(plyrRole_col)]
@@ -40,9 +42,9 @@ chart_list = ['Bar', 'Scatter', 'Plotly']
 
 with st.sidebar:
     option = st.selectbox("Select data to view on x-axis", col_ch,
-                      key='chart_op')
+                          key='chart_op')
 
-# define a list to store df on the basis of plyr role
+# define a list to store df on the basis of plyr role and option
 dfs = []
 
 for rol in plyrRole_col:
@@ -51,31 +53,37 @@ for rol in plyrRole_col:
 pop_var = col_ch.index(option)
 
 col_ch.pop(pop_var)
+
 with st.sidebar:
     option_2 = st.selectbox("Select data to view on y-axis", col_ch,
-                        key='chart_op_2')
+                            key='chart_op_2')
 
 pop_var = col_ch.index(option_2)
 
 col_ch.pop(pop_var)
 with st.sidebar:
     option_col = st.selectbox("Select data to to be shown by its colour intensity in the graph", col_ch,
-                          key='chart_op_col')
+                              key='chart_op_col')
 
-# density chart append to chart list
+# append density chart to chart list
 
 if option in num_col:
     chart_list.append('Density Plot')
 
 with st.sidebar:
-    chart_op = st.multiselect('Select Chart(s) you want to see', chart_list,
-                          key='chart_type', help="Density Plots will be shown for x-axis data")
+    chart_op = st.multiselect('Select Chart(s) you want to see',
+                              chart_list,
+                              key='chart_type',
+                              default=chart_list[0],
+                              help="Density Plots will be shown for x-axis data",
+                              )
 
 # Create plot
 with st.container():
     if plyrRole_col:
-        st.subheader(f"Plot(s) of {option} and {option_2}"
-                     f" indicating {option_col} by colour intensity.")
+        st.subheader(f"Plots of {option} and {option_2}"
+                     f" indicating {option_col} by colour intensity for "
+                     f"{', '.join(plyrRole_col)} playing role(s).")
         for chart in chart_op:
             if chart == 'Bar':
                 st.bar_chart(data, x=option, y=option_2, color=option_col,
