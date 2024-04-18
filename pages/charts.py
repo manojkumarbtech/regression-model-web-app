@@ -44,7 +44,9 @@ with st.sidebar:
     option = st.selectbox("Select data to view on x-axis", col_ch,
                           key='chart_op')
 
-# define a list to store df on the basis of plyr role and option
+# define a list to store df on the basis of plyr role and option to be used in
+# dist plot
+
 dfs = []
 
 for rol in plyrRole_col:
@@ -81,39 +83,48 @@ with st.sidebar:
 # Create plot
 with st.container():
     if plyrRole_col:
+
         st.subheader(f"Plots of {option} and {option_2}"
                      f" indicating {option_col} by colour intensity for "
                      f"{', '.join(plyrRole_col)} playing role(s).")
+
         for chart in chart_op:
-            if chart == 'Bar':
-                st.bar_chart(data, x=option, y=option_2, color=option_col,
-                             use_container_width=True)
-            if chart == 'Scatter':
-                st.scatter_chart(data, x=option, y=option_2, color=option_col,
+            match chart:
+                case 'Bar':
+                    st.bar_chart(data, x=option, y=option_2,
+                                 color=option_col,
                                  use_container_width=True)
-            if chart == 'Plotly':
-                fig = px.scatter(data, x=option, y=option_2, color=option_col)
-                st.plotly_chart(fig, use_container_width=True)
+                case 'Scatter':
+                    st.scatter_chart(data, x=option, y=option_2,
+                                     color=option_col,
+                                     use_container_width=True)
+                case 'Plotly':
+                    fig = px.scatter(data, x=option, y=option_2,
+                                     color=option_col)
+                    st.plotly_chart(fig, use_container_width=True)
 
-                fig_2 = px.bar(data, x=option, y=option_2, color=option_col)
-                st.plotly_chart(fig_2, use_container_width=True)
+                    fig_2 = px.bar(data, x=option, y=option_2,
+                                   color=option_col)
+                    st.plotly_chart(fig_2, use_container_width=True)
 
-            if chart == 'Density Plot':
-                fig = px.histogram(data[data['PLAYING ROLE'].isin(plyrRole_col)],
-                                   x=option, color='PLAYING ROLE')
-                st.plotly_chart(fig, use_container_width=True)
+                case 'Density Plot':
+                    fig = px.histogram(data[data['PLAYING ROLE'].isin(plyrRole_col)],
+                                       x=option,
+                                       color='PLAYING ROLE')
+                    st.plotly_chart(fig, use_container_width=True)
 
-                fig_ff = ff.create_distplot(dfs, group_labels=plyrRole_col)
-                st.plotly_chart(fig_ff, use_container_width=True)
+                    fig_ff = ff.create_distplot(dfs,
+                                                group_labels=plyrRole_col)
+                    st.plotly_chart(fig_ff, use_container_width=True)
 
-            # chart not ready
-            # if chart == 'Altair':
-            #     c = (
-            #         alt.Chart(data)
-            #         .mark_circle()
-            #          .encode(x=option, y=option_2, size='SOLD PRICE',
-            #                color=option_col,
-            #                tooltip=["SOLD PRICE", "PLAYING ROLE"])
-            #     )
+                # chart not ready
+                # case 'Altair':
+                #     c = (
+                #         alt.Chart(data)
+                #         .mark_circle()
+                #          .encode(x=option, y=option_2, size='SOLD PRICE',
+                #                color=option_col,
+                #                tooltip=["SOLD PRICE", "PLAYING ROLE"])
+                #     )
 
-            #     st.altair_chart(c, use_container_width=True)
+                #     st.altair_chart(c, use_container_width=True)
