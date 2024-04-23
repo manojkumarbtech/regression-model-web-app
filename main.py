@@ -32,9 +32,9 @@ with st.expander("About this app 🏏"):
           to the observed data
         """)
 
-st.page_link("pages/charts.py",
-             label="Click here to see Data Viz",
-             icon="📈")
+# st.page_link("pages/2_📈_charts.py",
+#             label="Click here to see Data Viz",
+#             icon="🧙")
 
 clmn1, clmn2 = st.columns(2)
 
@@ -71,7 +71,7 @@ with clmn1:
         lm = linear_model.LinearRegression()
         model = lm.fit(indep_var, dep_var)
 
-        st.subheader(f"🧙 The linear regression of {option} and {option_2} for "
+        st.subheader(f"📈 The linear regression of {option} and {option_2} for "
                      f"{', '.join(plyrRole_col)} playing role(s).")
 
         corr = df_n[option].corr(df_n[option_2])
@@ -155,7 +155,7 @@ with st.container():
         st.info("Please select appropriate data types to get the graph",
                 icon="🚓")
 
-# st.page_link("pages/player_list.py",
+# st.page_link("pages/3_🏏_player_list.py",
 #             label="Click here to see the players list page along which"
 #                   " the model is aligned",
 #             icon="🏏")
