@@ -9,6 +9,8 @@ data_unf = pd.read_csv('csv files/IPL IMB381IPL2013.csv')
 
 st.title('Data Visualization of IPL players')
 
+chart = ''
+
 # get numeric columns
 num_col = data_unf.select_dtypes(include=np.number).columns.tolist()
 
@@ -53,7 +55,6 @@ for rol in plyrRole_col:
     dfs.append(data_unf[data_unf['PLAYING ROLE'] == rol][option])
 
 pop_var = col_ch.index(option)
-
 col_ch.pop(pop_var)
 
 with st.sidebar:
@@ -61,8 +62,8 @@ with st.sidebar:
                             key='chart_op_2')
 
 pop_var = col_ch.index(option_2)
-
 col_ch.pop(pop_var)
+
 with st.sidebar:
     option_col = st.selectbox("Select data to to be shown by its colour intensity in the graph", col_ch,
                               key='chart_op_col')
@@ -89,16 +90,16 @@ with st.container():
                      f"{', '.join(plyrRole_col)} playing role(s).")
 
         for chart in chart_op:
-            match chart:
-                case 'Bar':
+
+            if chart == 'Bar':
                     st.bar_chart(data, x=option, y=option_2,
                                  color=option_col,
                                  use_container_width=True)
-                case 'Scatter':
+            if chart == 'Scatter':
                     st.scatter_chart(data, x=option, y=option_2,
                                      color=option_col,
                                      use_container_width=True)
-                case 'Plotly':
+            if chart == 'Plotly':
                     fig = px.scatter(data, x=option, y=option_2,
                                      color=option_col)
                     st.plotly_chart(fig, use_container_width=True)
@@ -107,7 +108,7 @@ with st.container():
                                    color=option_col)
                     st.plotly_chart(fig_2, use_container_width=True)
 
-                case 'Density Plot':
+            if chart == 'Density Plot':
                     fig = px.histogram(data[data['PLAYING ROLE'].isin(plyrRole_col)],
                                        x=option,
                                        color='PLAYING ROLE')
@@ -118,7 +119,7 @@ with st.container():
                     st.plotly_chart(fig_ff, use_container_width=True)
 
                 # chart not ready
-                # case 'Altair':
+                # if chart == 'Altair':
                 #     c = (
                 #         alt.Chart(data)
                 #         .mark_circle()
