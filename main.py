@@ -10,9 +10,9 @@ decimal_points = 6
 # Categories to show in dropdown menu
 
 col = ["SOLD PRICE", "SIXERS", "AGE", "T-RUNS", "T-WKTS",
-           "ODI-RUNS-S", "ODI-SR-B", "ODI-WKTS", "ODI-SR-BL", "CAPTAINCY EXP",
-           "RUNS-S", "HS", "AVE", "SR-B", "RUNS-C", "WKTS",
-           "AVE-BL", "ECON", "SR-BL", "AUCTION YEAR", "BASE PRICE"]
+       "ODI-RUNS-S", "ODI-SR-B", "ODI-WKTS", "ODI-SR-BL", "CAPTAINCY EXP",
+       "RUNS-S", "HS", "AVE", "SR-B", "RUNS-C", "WKTS",
+       "AVE-BL", "ECON", "SR-BL", "AUCTION YEAR", "BASE PRICE"]
 
 plyrRole = ['Allrounder', 'Batsman', 'Bowler', "W. Keeper"]
 
@@ -32,14 +32,7 @@ with st.expander("About this app 🏏"):
           to the observed data
         """)
 
-# st.page_link("pages/2_📈_charts.py",
-#             label="Click here to see Data Viz",
-#             icon="🧙")
-
-clmn1, clmn2 = st.columns(2)
-
 with st.sidebar:
-
     option = st.selectbox("Select data used to predict", col,
                           key="main_op")
 
@@ -60,58 +53,48 @@ with st.sidebar:
                 " roles are taken for regression as default",
                 icon="🧞")
 
+try:
+    df_n = data[data['PLAYING ROLE'].isin(plyrRole_col)]
+    indep_var = pd.DataFrame(df_n[option])
+    dep_var = pd.DataFrame(df_n[option_2])
+
+    lm = linear_model.LinearRegression()
+    model = lm.fit(indep_var, dep_var)
+
+    optionLow = option.lower()
+    option2Low = option_2.lower()
+
+    st.subheader(f"📈 The linear regression of {optionLow} and {option2Low} for "
+                 f"{', '.join(plyrRole_col)} playing role(s).")
+
+except ValueError:
+    st.info("Cannot find regression between the selected types "
+            "of data",
+            icon="🙀")
+
+tab1, tab2 = st.tabs(["Trendline Graph", "Bubble Graph"])
+
+with tab1:
+    df_1 = data[data['PLAYING ROLE'].isin(plyrRole_col)]
+
+    fig = px.scatter(df_1, x=option, y=option_2,
+                     color='PLAYING ROLE', trendline="ols")
+    st.plotly_chart(fig, use_container_width=True)
+
+with tab2:
+    fig_scat = px.scatter(df_1, x=option, y=option_2,
+                          size="SOLD PRICE", color="PLAYING ROLE",
+                          hover_name="COUNTRY", log_x=True, size_max=60
+                          )
+    st.plotly_chart(fig_scat, use_container_width=True)
+
+clmn1, clmn2 = st.columns(2)
+
 with clmn1:
+
     # linear regression
-
     try:
-        df_n = data[data['PLAYING ROLE'].isin(plyrRole_col)]
-        indep_var = pd.DataFrame(df_n[option])
-        dep_var = pd.DataFrame(df_n[option_2])
-
-        lm = linear_model.LinearRegression()
-        model = lm.fit(indep_var, dep_var)
-
-        st.subheader(f"📈 The linear regression of {option} and {option_2} for "
-                     f"{', '.join(plyrRole_col)} playing role(s).")
-
-        corr = df_n[option].corr(df_n[option_2])
-        corr_fl = "{:.{}f}".format(corr, decimal_points)
-        st.write(f'Correlation of {option} and {option_2} is : ' + str(corr_fl))
-
-        coef_fl = "{:.{}f}".format(model.coef_[0][0], decimal_points)
-        st.write(f"Slope : {str(coef_fl)}. In the context of cricket player data, the slope\n"
-                 f" in a linear regression model represents the change in the\n"
-                 f" dependent variable ({option_2}) for a one-unit \n"
-                 f" change in the independent variable ({option})"
-                 )
-
-    except ValueError:
-        st.info("Cannot find regression between the selected types "
-                "of data",
-                icon="🙀")
-
-with clmn2:
-    try:
-        coef_intercp = "{:.{}f}".format(model.intercept_[0], decimal_points)
-        st.write("Intercept : " + str(coef_intercp) +
-                 (" The intercept in a linear regression model is the predicted "
-                  f"value of the dependent variable ({option_2}) when the \n"
-                  f"independent variable ({option}) is zero"))
-
-        rsq_fl = "{:.{}f}".format(model.score(indep_var, dep_var), decimal_points)
-        st.write("R-Square value for the model : " + str(rsq_fl))
-
-    except ValueError:
-        st.info("Cannot find regression between the selected types "
-                "of data",
-                icon="😵")
-    except NameError:
-        st.info("Cannot find regression between the selected types "
-                "of data",
-                icon="🏏")
-
-    try:
-        indep_var_txt = st.text_input(f"Input {option} to predict {option_2} :",
+        indep_var_txt = st.text_input(f"Input {optionLow} to predict {option2Low} :",
                                       help="Enter appropriate values to get linear"
                                            " regression")
         indep_var_new = np.array([int(indep_var_txt)])
@@ -137,23 +120,48 @@ with clmn2:
         st.info("Please select numerical data to get linear regression",
                 icon="⛈️")
 
+with clmn2:
 
-with st.container():
     try:
-        df_1 = data[data['PLAYING ROLE'].isin(plyrRole_col)]
+        corr = df_n[option].corr(df_n[option_2])
+        corr_fl = "{:.{}f}".format(corr, decimal_points)
+        with st.popover(label=f"Correlation : {str(corr_fl)}",
+                        use_container_width=True):
+            st.write(f'Correlation reflects how similar the values of'
+                     f' two or more variables are across a dataset')
 
-        fig = px.scatter(df_1, x=option, y=option_2,
-                         color='PLAYING ROLE', trendline="ols")
-        st.plotly_chart(fig, use_container_width=True)
-        fig_scat = px.scatter(df_1, x=option, y=option_2,
-                              size="SOLD PRICE", color="PLAYING ROLE",
-                              hover_name="COUNTRY", log_x=True, size_max=60
-                              )
-        st.plotly_chart(fig_scat, use_container_width=True)
+        coef_fl = "{:.{}f}".format(model.coef_.squeeze(), decimal_points)
+        coef_intercp = "{:.{}f}".format(model.intercept_[0], decimal_points)
+
+        with st.popover(label=f"Slope : {str(coef_fl)}",
+                        use_container_width=True):
+            st.write(f"In the context of cricket player data, the slope\n"
+                     f" in a linear regression model represents the change in the\n"
+                     f" dependent variable ({option_2}) for a one-unit \n"
+                     f" change in the independent variable ({option})"
+                     )
+
+        with st.popover(label=f"Intercept : {str(coef_intercp)}",
+                        use_container_width=True):
+            st.write(" The intercept in a linear regression model is the predicted "
+                     f"value of the dependent variable ({option_2}) when the \n"
+                     f"independent variable ({option}) is zero")
+
+        rsq_fl = "{:.{}f}".format(model.score(indep_var, dep_var), decimal_points)
+        st.write("R-Square value for the model : " + str(rsq_fl))
 
     except ValueError:
-        st.info("Please select appropriate data types to get the graph",
-                icon="🚓")
+        st.info("Cannot find regression between the selected types "
+                "of data",
+                icon="😵")
+    except NameError:
+        st.info("Cannot find regression between the selected types "
+                "of data",
+                icon="🏏")
+
+# st.page_link("pages/2_📈_charts.py",
+#             label="Click here to see Data Viz",
+#             icon="🧙")
 
 # st.page_link("pages/3_🏏_player_list.py",
 #             label="Click here to see the players list page along which"
@@ -174,4 +182,3 @@ disclaimer = "When you make conclusions from data analysis, you need" \
 
 with st.expander("Disclaimer"):
     st.warning(disclaimer)
-

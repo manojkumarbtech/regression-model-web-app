@@ -7,9 +7,12 @@ import altair as alt
 
 data_unf = pd.read_csv('csv files/IPL IMB381IPL2013.csv')
 
-st.title('Data Visualization of IPL players')
+# st.title('Data Visualization of IPL players')
 
 chart = ''
+
+chart_list = ['Bar', 'Scatter', 'Plotly', 'Plotly-2',
+              'Histogram', 'Distribution Plot']
 
 # get numeric columns
 num_col = data_unf.select_dtypes(include=np.number).columns.tolist()
@@ -34,98 +37,90 @@ with st.sidebar:
                                   default='Allrounder',
                                   key="rolChart")
 
-try:
-    data = data_unf[data_unf['PLAYING ROLE'].isin(plyrRole_col)]
-except NameError:
-    st.info("Sorry, something went wrong",
-            icon="🫠")
+    try:
+        data = data_unf[data_unf['PLAYING ROLE'].isin(plyrRole_col)]
+    except NameError:
+        st.info("Sorry, something went wrong",
+                icon="🫠")
 
-chart_list = ['Bar', 'Scatter', 'Plotly']
-
-with st.sidebar:
     option = st.selectbox("Select data to view on x-axis", col_ch,
                           key='chart_op')
 
-# define a list to store df on the basis of plyr role and option to be used in
-# dist plot
+    # define a list to store df on the basis of plyr role and option to be used in
+    # dist plot
 
-dfs = []
+    dfs = []
 
-for rol in plyrRole_col:
-    dfs.append(data_unf[data_unf['PLAYING ROLE'] == rol][option])
+    for rol in plyrRole_col:
+        dfs.append(data_unf[data_unf['PLAYING ROLE'] == rol][option])
 
-pop_var = col_ch.index(option)
-col_ch.pop(pop_var)
+    col_ch.remove(option)
 
-with st.sidebar:
     option_2 = st.selectbox("Select data to view on y-axis", col_ch,
                             key='chart_op_2')
 
-pop_var = col_ch.index(option_2)
-col_ch.pop(pop_var)
+    col_ch.remove(option_2)
 
-with st.sidebar:
     option_col = st.selectbox("Select data to to be shown by its colour intensity in the graph", col_ch,
                               key='chart_op_col')
 
-# append density chart to chart list
+if plyrRole_col:
 
-if option in num_col:
-    chart_list.append('Density Plot')
+    st.subheader(f"Plots of {option} and {option_2}"
+                 f" indicating {option_col} by colour intensity for "
+                 f"{', '.join(plyrRole_col)} playing role(s).")
 
-with st.sidebar:
-    chart_op = st.multiselect('Select Chart(s) you want to see',
-                              chart_list,
-                              key='chart_type',
-                              default=chart_list[0],
-                              help="Density Plots will be shown for x-axis data",
-                              )
+tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(chart_list)
 
 # Create plot
-with st.container():
-    if plyrRole_col:
 
-        st.subheader(f"Plots of {option} and {option_2}"
-                     f" indicating {option_col} by colour intensity for "
-                     f"{', '.join(plyrRole_col)} playing role(s).")
+with tab1:
 
-        for chart in chart_op:
+    st.bar_chart(data, x=option, y=option_2,
+                 color=option_col,
+                 use_container_width=True)
 
-            if chart == 'Bar':
-                    st.bar_chart(data, x=option, y=option_2,
-                                 color=option_col,
-                                 use_container_width=True)
-            if chart == 'Scatter':
-                    st.scatter_chart(data, x=option, y=option_2,
-                                     color=option_col,
-                                     use_container_width=True)
-            if chart == 'Plotly':
-                    fig = px.scatter(data, x=option, y=option_2,
-                                     color=option_col)
-                    st.plotly_chart(fig, use_container_width=True)
+with tab2:
 
-                    fig_2 = px.bar(data, x=option, y=option_2,
-                                   color=option_col)
-                    st.plotly_chart(fig_2, use_container_width=True)
+    st.scatter_chart(data, x=option, y=option_2,
+                     color=option_col,
+                     use_container_width=True)
 
-            if chart == 'Density Plot':
-                    fig = px.histogram(data[data['PLAYING ROLE'].isin(plyrRole_col)],
-                                       x=option,
-                                       color='PLAYING ROLE')
-                    st.plotly_chart(fig, use_container_width=True)
+with tab3:
 
-                    fig_ff = ff.create_distplot(dfs,
-                                                group_labels=plyrRole_col)
-                    st.plotly_chart(fig_ff, use_container_width=True)
+    fig = px.scatter(data, x=option, y=option_2,
+                     color=option_col)
+    st.plotly_chart(fig, use_container_width=True)
 
-                # chart not ready
-                # if chart == 'Altair':
-                #     c = (
-                #         alt.Chart(data)
-                #         .mark_circle()
-                #          .encode(x=option, y=option_2, size='SOLD PRICE',
-                #                color=option_col,
-                #                tooltip=["SOLD PRICE", "PLAYING ROLE"])
-                #     )
+with tab4:
 
-                #     st.altair_chart(c, use_container_width=True)
+    fig_2 = px.bar(data, x=option, y=option_2,
+                   color=option_col)
+    st.plotly_chart(fig_2, use_container_width=True)
+
+with tab5:
+
+    fig = px.histogram(data[data['PLAYING ROLE'].isin(plyrRole_col)],
+                       x=option,
+                       color='PLAYING ROLE')
+    st.plotly_chart(fig, use_container_width=True)
+
+with tab6:
+
+    if option in num_col:
+        fig_ff = ff.create_distplot(dfs,
+                                    group_labels=plyrRole_col)
+
+        st.plotly_chart(fig_ff, use_container_width=True)
+
+    # chart not ready
+    # if chart == 'Altair':
+    #     c = (
+    #         alt.Chart(data)
+    #         .mark_circle()
+    #          .encode(x=option, y=option_2, size='SOLD PRICE',
+    #                color=option_col,
+    #                tooltip=["SOLD PRICE", "PLAYING ROLE"])
+    #     )
+
+    #     st.altair_chart(c, use_container_width=True)
