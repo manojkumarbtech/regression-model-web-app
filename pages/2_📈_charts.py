@@ -9,8 +9,6 @@ data_unf = pd.read_csv('csv files/IPL IMB381IPL2013.csv')
 
 # st.title('Data Visualization of IPL players')
 
-chart = ''
-
 chart_list = ['Bar', 'Scatter', 'Plotly', 'Plotly-2',
               'Histogram', 'Distribution Plot']
 
@@ -30,12 +28,13 @@ col_ch = ["COUNTRY", "ODI-RUNS-S", "ODI-SR-B", "T-WKTS", "AGE", "ODI-WKTS",
 
 plyrRole = ['Allrounder', 'Batsman', 'Bowler', "W. Keeper"]
 
+plyrRole_col = st.multiselect("Select playing role by which the player stats are to"
+                              " be shown in the graph(s)",
+                              plyrRole,
+                              default=plyrRole,
+                              key="rolChart")
+
 with st.sidebar:
-    plyrRole_col = st.multiselect("Select playing role by which the player stats are to"
-                                  " be shown in the graph(s)",
-                                  plyrRole,
-                                  default='Allrounder',
-                                  key="rolChart")
 
     try:
         data = data_unf[data_unf['PLAYING ROLE'].isin(plyrRole_col)]
@@ -64,11 +63,10 @@ with st.sidebar:
     option_col = st.selectbox("Select data to to be shown by its colour intensity in the graph", col_ch,
                               key='chart_op_col')
 
-if plyrRole_col:
-
-    st.subheader(f"Plots of {option} and {option_2}"
-                 f" indicating {option_col} by colour intensity for "
-                 f"{', '.join(plyrRole_col)} playing role(s).")
+st.write(f"Plots of {option} and {option_2}"
+         f" indicating {option_col} by colour intensity for "
+         f"{', '.join(plyrRole_col)} playing role(s). Histogram and "
+         f" Distribution plots are shown for x-axis data. ")
 
 tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(chart_list)
 

@@ -20,17 +20,17 @@ data = pd.read_csv('csv files/IPL IMB381IPL2013.csv')
 
 st.title("Auction Price Analytics for IPL Player")
 
-with st.expander("About this app 🏏"):
-    st.write("""
-        Get in the IPL spirit this season by playing around with
-        this fun app! Predict any feature for e.g. the number of sixers
-        a player may hit using their base or auction price.
-        """)
-    st.info("""
-        Linear regression is a statistical method used to understand the
-         relationship between two variables by fitting a linear equation
-          to the observed data
-        """)
+plyrRole_col = st.multiselect("Select playing role for which the player stats are to"
+                              " be aligned in regression and shown in the graph",
+                              plyrRole,
+                              key="regChart",
+                              default=plyrRole)
+
+if len(plyrRole_col) == 0:
+    plyrRole_col = plyrRole
+    st.info("If no playing role is selected, all the playing"
+            " roles are taken for regression as default",
+            icon="🧞")
 
 with st.sidebar:
     option = st.selectbox("Select data used to predict", col,
@@ -41,17 +41,16 @@ with st.sidebar:
     option_2 = st.selectbox("Select data to be predicted", col,
                             key="main_op_2")
 
-    plyrRole_col = st.multiselect("Select playing role for which the player stats are to"
-                                  " be aligned in regression and shown in the graph",
-                                  plyrRole,
-                                  key="regChart",
-                                  default=plyrRole)
-
-    if len(plyrRole_col) == 0:
-        plyrRole_col = plyrRole
-        st.info("If no playing role is selected, all the playing"
-                " roles are taken for regression as default",
-                icon="🧞")
+    st.write("""
+            🏏 Get in the IPL spirit this season by playing around with
+            this fun app! Predict any feature for e.g. the number of sixers
+            a player may hit using their base or auction price.
+            """)
+    st.info("""
+            Linear regression is a statistical method used to understand the
+             relationship between two variables by fitting a linear equation
+              to the observed data
+            """)
 
 try:
     df_n = data[data['PLAYING ROLE'].isin(plyrRole_col)]
@@ -132,6 +131,7 @@ with clmn2:
 
         coef_fl = "{:.{}f}".format(model.coef_.squeeze(), decimal_points)
         coef_intercp = "{:.{}f}".format(model.intercept_[0], decimal_points)
+        rsq_fl = "{:.{}f}".format(model.score(indep_var, dep_var), decimal_points)
 
         with st.popover(label=f"Slope : {str(coef_fl)}",
                         use_container_width=True):
@@ -147,8 +147,11 @@ with clmn2:
                      f"value of the dependent variable ({option_2}) when the \n"
                      f"independent variable ({option}) is zero")
 
-        rsq_fl = "{:.{}f}".format(model.score(indep_var, dep_var), decimal_points)
-        st.write("R-Square value for the model : " + str(rsq_fl))
+        with st.popover(label=f'R-Square : {str(rsq_fl)}',
+                        use_container_width=True):
+            st.write("R-Square value for the model "
+                     "indicates the percentage of the variance in the dependent variable "
+                     "that the independent variable explains.")
 
     except ValueError:
         st.info("Cannot find regression between the selected types "

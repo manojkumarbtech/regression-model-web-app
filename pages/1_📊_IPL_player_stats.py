@@ -49,6 +49,9 @@ def formatBattingCombined(df_batting_combined, df_batting_max):
     return df_batting_combined
 
 
+# stats_op = st.selectbox(f"Select the stats you want to see",
+#                         ('Batting Stats', 'Bowling Stats'), key='stats_op')
+
 batting_file_path = "cleaned_datasets/Batting Stats"
 
 # bowling_file_path = "cleaned_datasets/Bowling Stats"
