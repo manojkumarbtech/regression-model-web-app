@@ -75,11 +75,11 @@ df_1, df_2 = combine_df_season_cnt(filtered_batting_list)
 
 df_3 = formatBattingCombined(df_1, df_2)
 
-st.write(df_3)
+# st.write(df_3)
 
-df_most_runs = df_3.sort_values(by=['Runs'], ascending=False)[:25].copy()
+df_most_runs = df_3.sort_values(by=['Runs'], ascending=False)[:5].copy()
 plt.figure(figsize=(20, 10))
-plt.title(f"25 Batsmen with highest T20 Runs in the period {yr_list[0]}-{yr_list[1]}")
+plt.title(f"5 Batsmen with highest T20 Runs in the period {yr_list[0]}-{yr_list[1]}")
 ax = sns.barplot(x=df_most_runs["Runs"], y=df_most_runs["Player"], palette="husl")
 ax.set(ylabel="Player Name", xlabel="Runs Scored")
 st.pyplot(fig=plt)
