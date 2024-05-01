@@ -65,8 +65,6 @@ yr_list = st.slider("Select the years you want the data for",
                     min_value=2016,
                     max_value=2022)
 
-col1, col2 = st.columns(2)
-
 for yr in range(yr_list[0], yr_list[1] + 1):
     filtered_batting_list.append(load_data(batting_file_path,
                                            f"batting_data_{str(yr)}.csv"))
@@ -76,6 +74,8 @@ df_1, df_2 = combine_df_season_cnt(filtered_batting_list)
 df_3 = formatBattingCombined(df_1, df_2)
 
 # st.write(df_3)
+
+st.subheader(f"📉 5 Batsmen with highest T20 Runs in the period {yr_list[0]}-{yr_list[1]}")
 
 df_most_runs = df_3.sort_values(by=['Runs'], ascending=False)[:5].copy()
 plt.figure(figsize=(20, 10))

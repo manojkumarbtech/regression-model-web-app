@@ -8,6 +8,8 @@ filepath_player_auc = 'csv files/IPL_2023-22_Sold_Players.csv'
 # define default player
 player_def = "Virat Kohli"
 
+st.title("🦗 The Players")
+
 with st.sidebar:
     player = st.text_input(label=prompt_1, value=player_def)
 

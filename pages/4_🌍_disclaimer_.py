@@ -1,5 +1,7 @@
 import streamlit as st
 
+st.title('🏗️')
+
 disclaimer = "When you make conclusions from data analysis, you need" \
              " to make sure that you don’t assume a causal relationship" \
              " between elements of your data when there is only a correlation." \

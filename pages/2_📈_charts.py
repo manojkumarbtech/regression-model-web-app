@@ -7,7 +7,7 @@ import altair as alt
 
 data_unf = pd.read_csv('csv files/IPL IMB381IPL2013.csv')
 
-# st.title('Data Visualization of IPL players')
+st.title('🧙 Data Visualization of IPL players')
 
 chart_list = ['Bar', 'Scatter', 'Plotly', 'Plotly-2',
               'Histogram', 'Distribution Plot']

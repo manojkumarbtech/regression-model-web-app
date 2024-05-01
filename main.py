@@ -8,7 +8,7 @@ import statsmodels
 
 decimal_points = 6
 
-icon_list = ['🙀', '🫠', '😵', '🧙', '🏏']
+icon_list = ['🙀', '🫠', '😵', '🧙', '🏏', '🧞', '📈']
 
 # heat-map prompt
 
@@ -39,9 +39,10 @@ plyrRole_col = st.multiselect("Select playing role for which the player stats ar
 
 if len(plyrRole_col) == 0:
     plyrRole_col = plyrRole
+    r1 = random.randint(0, len(icon_list)-1)
     st.info("If no playing role is selected, all the playing"
             " roles are taken for regression as default",
-            icon="🧞")
+            icon=icon_list[r1])
 
 with st.sidebar:
     option = st.selectbox("Select data used to predict", col,
@@ -75,7 +76,7 @@ try:
     optionLow = option.lower()
     option2Low = option_2.lower()
 
-    st.subheader(f"📈 The linear regression of {optionLow} and {option2Low} for "
+    st.subheader(f"🏟️ The linear regression of {optionLow} and {option2Low} for "
                  f"{', '.join(plyrRole_col)} playing role(s).")
 
 except ValueError:
@@ -149,7 +150,7 @@ with clmn1:
         st.write(df)
 
     except ValueError:
-        r1 = random.randint(0, 4)
+        r1 = random.randint(0, len(icon_list)-1)
         st.info("Please enter a value in the box above to get linear regression",
                 icon=icon_list[r1])
 
@@ -214,5 +215,5 @@ with clmn4:
 with clmn5:
     st.page_link("pages/3_🏏_player_list.py",
                  label="The Players",
-                 icon="🏏",
+                 icon="🦗",
                  use_container_width=True)
