@@ -105,7 +105,7 @@ try:
 
 except IndexError:
     st.info(player + " is not in player stats database you are referring to")
-except NameError:
+except ValueError:
     st.warning("Please enter a player name.")
 
 # st.toast('Woah!')
