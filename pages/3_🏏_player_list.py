@@ -43,16 +43,16 @@ if player:
 
     if 'Batting Stats' == stats_op:
         # display batting stats of the player
-        col_pl = ["POS", "Player", "Mat", "Inns", "NO", "Runs",
-                  "HS", "Avg", "BF", "SR", "100", "50", "4s", "6s"
+        col_pl = ["POS", "Mat", "Inns", "NO", "Runs",
+                  "HS", "Avg", "BF", "SR", "100", "50", "4s", "6s", "Player"
                   ]
 
         filepath_cric = "csv files/BATTING STATS - IPL_2022.csv"
 
     if 'Bowling Stats' == stats_op:
         # display bowling stats of the player
-        col_pl = ["POS", "Player", "Mat", "Inns", "Ov", "Runs", "Wkts",
-                  "BBI", "Avg", "Econ", "SR", "4w", "5w"
+        col_pl = ["POS", "Mat", "Inns", "Ov", "Runs", "Wkts",
+                  "BBI", "Avg", "Econ", "SR", "4w", "5w", "PLayer"
                   ]
 
         filepath_cric = "csv files/BOWLING STATS - IPL_2022.csv"
@@ -72,6 +72,8 @@ try:
     with st.sidebar:
         option = st.selectbox("Select data to view for the specific player", col_pl,
                               key='player_op')
+
+        col_pl.remove(option)
 
         option_2 = st.selectbox("Select data to view for the specific player", col_pl,
                                 key='player_op_2')

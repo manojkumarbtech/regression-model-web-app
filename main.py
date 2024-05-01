@@ -7,6 +7,11 @@ import statsmodels
 
 decimal_points = 6
 
+# heat-map prompt
+
+help_prompt = ('Data used to predict will be shown by'
+               ' its colour intensity in the heatmap')
+
 # Categories to show in dropdown menu
 
 col = ["SOLD PRICE", "SIXERS", "AGE", "T-RUNS", "T-WKTS",
@@ -15,6 +20,9 @@ col = ["SOLD PRICE", "SIXERS", "AGE", "T-RUNS", "T-WKTS",
        "AVE-BL", "ECON", "SR-BL", "AUCTION YEAR", "BASE PRICE"]
 
 plyrRole = ['Allrounder', 'Batsman', 'Bowler', "W. Keeper"]
+
+col_mlr = ["COUNTRY", "TEAM", "PLAYING ROLE", "AGE",
+           "CAPTAINCY EXP", "AUCTION YEAR"]
 
 data = pd.read_csv('csv files/IPL IMB381IPL2013.csv')
 
@@ -41,15 +49,16 @@ with st.sidebar:
     option_2 = st.selectbox("Select data to be predicted", col,
                             key="main_op_2")
 
+    heatmap_op = st.multiselect('Select features you want to see on the heatmap',
+                                col_mlr,
+                                key='heatmap',
+                                help=help_prompt,
+                                default=['PLAYING ROLE', 'TEAM'])
+
     st.write("""
             🏏 Get in the IPL spirit this season by playing around with
             this fun app! Predict any feature for e.g. the number of sixers
             a player may hit using their base or auction price.
-            """)
-    st.info("""
-            Linear regression is a statistical method used to understand the
-             relationship between two variables by fitting a linear equation
-              to the observed data
             """)
 
 try:
@@ -71,7 +80,7 @@ except ValueError:
             "of data",
             icon="🙀")
 
-tab1, tab2 = st.tabs(["Trendline Graph", "Bubble Graph"])
+tab1, tab2, tab3 = st.tabs(["Trendline Graph", "Bubble Graph", "Heat-Map Graph"])
 
 with tab1:
     df_1 = data[data['PLAYING ROLE'].isin(plyrRole_col)]
@@ -87,6 +96,30 @@ with tab2:
                           )
     st.plotly_chart(fig_scat, use_container_width=True)
 
+with tab3:
+
+    if len(heatmap_op) < 2:
+        heatmap_op = ['PLAYING ROLE', 'TEAM']
+
+    try:
+        df = data.pivot_table(index=heatmap_op[0],
+                              columns=heatmap_op[1],
+                              values=option)
+
+        fig = px.imshow(df)
+
+        st.plotly_chart(fig,
+                        use_container_width=True)
+
+    except ValueError:
+        st.warning("Select distinct data for horizontal,"
+                   " vertical axes and the color intensity",
+                   icon="⛈️")
+
+st.info("Linear regression is a statistical method used to understand the"
+        "relationship between two variables by fitting a linear equation"
+        "to the observed data")
+
 clmn1, clmn2 = st.columns(2)
 
 with clmn1:
@@ -96,6 +129,7 @@ with clmn1:
         indep_var_txt = st.text_input(f"Input {optionLow} to predict {option2Low} :",
                                       help="Enter appropriate values to get linear"
                                            " regression")
+
         indep_var_new = np.array([int(indep_var_txt)])
         indep_var_new = indep_var_new.reshape(-1, 1)
         dep_var_new = model.predict(indep_var_new)
@@ -112,18 +146,15 @@ with clmn1:
         st.write(df)
 
     except ValueError:
-        st.info("Please enter a value in the box above or select appropriate"
-                " data types to get linear regression",
+        st.info("Please enter a value in the box above to get linear regression",
                 icon="🫠")
-    except NameError:
-        st.info("Please select numerical data to get linear regression",
-                icon="⛈️")
 
 with clmn2:
 
     try:
         corr = df_n[option].corr(df_n[option_2])
         corr_fl = "{:.{}f}".format(corr, decimal_points)
+
         with st.popover(label=f"Correlation : {str(corr_fl)}",
                         use_container_width=True):
             st.write(f'Correlation reflects how similar the values of'
@@ -171,17 +202,3 @@ with clmn2:
 #                   " the model is aligned",
 #             icon="🏏")
 
-disclaimer = "When you make conclusions from data analysis, you need" \
-             " to make sure that you don’t assume a causal relationship" \
-             " between elements of your data when there is only a correlation." \
-             " When your data shows that outdoor temperature and ice cream" \
-             " consumption both go up at the same time, it might be tempting" \
-             " to conclude that hot weather causes people to eat ice cream." \
-             " But, a closer examination of the data would reveal that every" \
-             " change in temperature doesn’t lead to a change in ice cream" \
-             " purchases. In addition, there might have been a sale on ice" \
-             " cream at the same time that the data was collected, which" \
-             " might not have been considered in your analysis"
-
-with st.expander("Disclaimer"):
-    st.warning(disclaimer)
