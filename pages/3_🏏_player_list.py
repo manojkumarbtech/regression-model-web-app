@@ -8,7 +8,6 @@ filepath_player_auc = 'csv files/IPL_2023-22_Sold_Players.csv'
 # define default player
 player_def = "Virat Kohli"
 
-
 with st.sidebar:
     player = st.text_input(label=prompt_1, value=player_def)
 
@@ -17,7 +16,7 @@ with st.sidebar:
 
 # define select-box items
 col_pl = []
-pl_col = []
+col_pl_temp = []
 
 # define filepath for player stats
 filepath_cric = ""
@@ -46,9 +45,9 @@ if player:
         col_pl = ["POS", "Player", "Mat", "Inns", "NO", "Runs",
                   "HS", "Avg", "BF", "SR", "100", "50", "4s", "6s"
                   ]
-        pl_col = ["POS", "Player", "Mat", "Inns", "NO", "Runs",
-                  "HS", "Avg", "BF", "SR", "100", "50", "4s", "6s"
-                  ]
+        col_pl_temp = ["POS", "Player", "Mat", "Inns", "NO", "Runs",
+                       "HS", "Avg", "BF", "SR", "100", "50", "4s", "6s"
+                       ]
 
         filepath_cric = "csv files/BATTING STATS - IPL_2022.csv"
 
@@ -57,55 +56,55 @@ if player:
         col_pl = ["POS", "Player", "Mat", "Inns", "Ov", "Runs", "Wkts",
                   "BBI", "Avg", "Econ", "SR", "4w", "5w"
                   ]
-        pl_col = ["POS", "Player", "Mat", "Inns", "Ov", "Runs", "Wkts",
-                  "BBI", "Avg", "Econ", "SR", "4w", "5w"
-                  ]
+
+        col_pl_temp = ["POS", "Player", "Mat", "Inns", "Ov", "Runs", "Wkts",
+                       "BBI", "Avg", "Econ", "SR", "4w", "5w"
+                       ]
 
         filepath_cric = "csv files/BOWLING STATS - IPL_2022.csv"
 
-# except IndexError:
-#     st.info(player + " might not have been auctioned.")
-#     player_role = 'player'
+    # except IndexError:
+    #     st.info(player + " might not have been auctioned.")
+    #     player_role = 'player'
 
+    try:
+        data = pd.read_csv(filepath_cric)
+    except FileNotFoundError:
+        st.warning("Woah there! pardner",
+                   icon='🤠')
 
-try:
-    data = pd.read_csv(filepath_cric)
-except FileNotFoundError:
-    st.warning("Woah there! pardner",
-               icon='🤠')
+    try:
+        with st.sidebar:
 
-try:
-    with st.sidebar:
+            # index argument changes the values which col_pl is referring to
+            option = st.selectbox("Select data to view for the specific player",
+                                  col_pl,
+                                  key='player_op',
+                                  index=2)
 
-        # index argument changes the values which col_pl is referring to
-        option = st.selectbox("Select data to view for the specific player",
-                              col_pl,
-                              key='player_op',
-                              index=2)
+            col_pl.remove(option)
 
-        col_pl.remove(option)
+            option_2 = st.selectbox("Select data to view for the specific player",
+                                    col_pl,
+                                    key='player_op_2',
+                                    index=6)
 
-        option_2 = st.selectbox("Select data to view for the specific player",
-                                col_pl,
-                                key='player_op_2',
-                                index=6)
+        player_value = data.loc[data['Player'] == player, (option, option_2)].values[0]
+        st.info(f"{player} is a {player_role} whose {option} is/are {player_value[0]} " +
+                f"and the {option_2} is/are {player_value[1]}.")
 
-    player_value = data.loc[data['Player'] == player, (option, option_2)].values[0]
-    st.info(f"{player} is a {player_role} whose {option} is/are {player_value[0]} " +
-            f"and the {option_2} is/are {player_value[1]}.")
+        num_play = st.slider("What is the range of players you want to get details of ?", value=(1, 162),
+                             help="Batters = 162, Bowlers = 103 ")
+        num_col = st.slider("What is the range of columns you want to see?", value=(1, 14),
+                            help="Columns = 14")
 
-    num_play = st.slider("What is the range of players you want to get details of ?", value=(1, 162),
-                         help="Batters = 162, Bowlers = 103 ")
-    num_col = st.slider("What is the range of columns you want to see?", value=(1, 14),
-                        help="Columns = 14")
+        disp_col = col_pl_temp[num_col[0]:num_col[1]]
 
-    disp_col = pl_col[num_col[0]:num_col[1]]
+        st.write(data[disp_col][num_play[0]:num_play[1]])
 
-    st.write(data[disp_col][num_play[0]:num_play[1]])
-
-except IndexError:
-    st.info(player + " is not in player stats database you are referring to")
-except ValueError:
-    st.warning("Please enter a player name.")
+    except IndexError:
+        st.info(player + " is not in player stats database you are referring to")
+    except ValueError:
+        st.warning("Please enter a player name.")
 
 # st.toast('Woah!')
