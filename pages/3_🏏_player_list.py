@@ -76,7 +76,6 @@ if player:
     try:
         with st.sidebar:
 
-            # index argument changes the values which col_pl is referring to
             option = st.selectbox("Select data to view for the specific player",
                                   col_pl,
                                   key='player_op',

@@ -3,9 +3,12 @@ import pandas as pd
 import plotly.express as px
 import streamlit as st
 from sklearn import linear_model
+import random
 import statsmodels
 
 decimal_points = 6
+
+icon_list = ['🙀', '🫠', '😵', '🧙', '🏏']
 
 # heat-map prompt
 
@@ -146,8 +149,9 @@ with clmn1:
         st.write(df)
 
     except ValueError:
+        r1 = random.randint(0, 4)
         st.info("Please enter a value in the box above to get linear regression",
-                icon="🫠")
+                icon=icon_list[r1])
 
 with clmn2:
 
@@ -193,12 +197,22 @@ with clmn2:
                 "of data",
                 icon="🏏")
 
-# st.page_link("pages/2_📈_charts.py",
-#             label="Click here to see Data Viz",
-#             icon="🧙")
+clmn3, clmn4, clmn5 = st.columns(3)
 
-# st.page_link("pages/3_🏏_player_list.py",
-#             label="Click here to see the players list page along which"
-#                   " the model is aligned",
-#             icon="🏏")
+with clmn3:
+    st.page_link("pages/1_📊_IPL_player_stats.py",
+                 label="Top 5 Batsmen",
+                 icon="📊",
+                 use_container_width=True)
 
+with clmn4:
+    st.page_link("pages/2_📈_charts.py",
+                 label="See Data Viz",
+                 icon="🧙",
+                 use_container_width=True)
+
+with clmn5:
+    st.page_link("pages/3_🏏_player_list.py",
+                 label="The Players",
+                 icon="🏏",
+                 use_container_width=True)
