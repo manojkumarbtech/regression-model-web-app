@@ -84,7 +84,7 @@ except ValueError:
             "of data",
             icon="🙀")
 
-tab1, tab2, tab3 = st.tabs(["Trendline Graph", "Bubble Graph", "Heat-Map Graph"])
+tab1, tab2, tab3 = st.tabs(["Trendline Graph", "Bubble Graph", "Heat-Map"])
 
 with tab1:
     df_1 = data[data['PLAYING ROLE'].isin(plyrRole_col)]

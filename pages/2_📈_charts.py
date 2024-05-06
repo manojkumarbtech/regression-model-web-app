@@ -3,14 +3,17 @@ import pandas as pd
 import numpy as np
 import plotly.express as px
 import plotly.figure_factory as ff
+import random
 import altair as alt
 
 data_unf = pd.read_csv('csv files/IPL IMB381IPL2013.csv')
 
 st.title('🧙 Data Viz')
 
-chart_list = ['Bar', 'Scatter', 'Plotly', 'Plotly-2',
+chart_list = ['Bar', 'Scatter', 'Bar-2', 'Scatter-2',
               'Histogram', 'Distribution Plot']
+
+icon_list = ['🙀', '🫠', '😵', '🧙', '🏏', '🧞', '📈']
 
 # get numeric columns
 num_col = data_unf.select_dtypes(include=np.number).columns.tolist()
@@ -34,13 +37,16 @@ plyrRole_col = st.multiselect("Select playing role by which the player stats are
                               default=plyrRole,
                               key="rolChart")
 
-with st.sidebar:
+if len(plyrRole_col) == 0:
+    plyrRole_col = plyrRole
+    r1 = random.randint(0, len(icon_list)-1)
+    st.info("If no playing role is selected, all the playing"
+            " roles are taken for the graph as default",
+            icon=icon_list[r1])
 
-    try:
-        data = data_unf[data_unf['PLAYING ROLE'].isin(plyrRole_col)]
-    except NameError:
-        st.info("Sorry, something went wrong",
-                icon="🫠")
+data = data_unf[data_unf['PLAYING ROLE'].isin(plyrRole_col)]
+
+with st.sidebar:
 
     option = st.selectbox("Select data to view on x-axis", col_ch,
                           key='chart_op')
@@ -84,13 +90,13 @@ with tab2:
                      color=option_col,
                      use_container_width=True)
 
-with tab3:
+with tab4:
 
     fig = px.scatter(data, x=option, y=option_2,
                      color=option_col)
     st.plotly_chart(fig, use_container_width=True)
 
-with tab4:
+with tab3:
 
     fig_2 = px.bar(data, x=option, y=option_2,
                    color=option_col)
