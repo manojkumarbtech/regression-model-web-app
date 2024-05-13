@@ -121,8 +121,8 @@ with tab3:
                    icon="⛈️")
 
 st.info("Linear regression is a statistical method used to understand the"
-        "relationship between two variables by fitting a linear equation"
-        "to the observed data")
+        " relationship between two variables by fitting a linear equation"
+        " to the observed data")
 
 clmn1, clmn2 = st.columns(2)
 
