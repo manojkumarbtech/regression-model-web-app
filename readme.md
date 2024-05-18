@@ -2,7 +2,7 @@
 
 If you have ever watched a bit of English Premier League you 
 might have seen their data zone where many stats such as total
-distance run, pressure, shots on target, passes, and xG. xG is
+distance run, pressure, shots on target, passes, and xG are shown. xG is
 short for expected goals.
 
 So this project aims to similarly find the xSixers of a batsman, xWickets
