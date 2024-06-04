@@ -14,7 +14,7 @@ Some visualization tools are included to showcase the big picture of
 the IPL cricket season like heatmaps, top 5 batsmen, bar and scatter
 plots for all kinds of data.
 
-[check it out here](aniketm117-regression-model-web-app-main-2lx3jl.streamlit.app/)
+[check it out here](https://aniketm117-regression-model-web-app-main-2lx3jl.streamlit.app/)
 
 *Toss a coin and have fun!*
 
