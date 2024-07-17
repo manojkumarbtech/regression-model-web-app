@@ -10,6 +10,8 @@ decimal_points = 6
 
 icon_list = ['🙀', '🫠', '😵', '🧙', '🏏', '🧞', '📈']
 
+icon_list_2 = ['🤺', '🏇', '🤿', '🏊', '♟', '🦕', '🎢']
+
 # heat-map prompt
 
 help_prompt = ('Data used to predict will be shown by'
@@ -29,7 +31,9 @@ col_mlr = ["COUNTRY", "TEAM", "PLAYING ROLE", "AGE",
 
 data = pd.read_csv('csv files/IPL IMB381IPL2013.csv')
 
-st.title("Auction Price Analytics for IPL Player")
+r_2 = random.randint(0, len(icon_list_2)-1)
+
+st.title(f"Player Data Analytics for IPL {icon_list_2[r_2]}")
 
 plyrRole_col = st.multiselect("Select playing role for which the player stats are to"
                               " be aligned in regression and shown in the graph",
