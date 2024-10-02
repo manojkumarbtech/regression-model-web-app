@@ -94,14 +94,14 @@ if player:
         st.info(f"{player} is a {player_role} whose {option} is/are {player_value[0]} " +
                 f"and the {option_2} is/are {player_value[1]}.")
 
-        num_play = st.slider("What is the range of players you want to get details of ?", value=(1, 162),
-                             help="Batters = 162, Bowlers = 103 ")
-        num_col = st.slider("What is the range of columns you want to see?", value=(1, 14),
-                            help="Columns = 14")
+        # num_play = st.slider("What is the range of players you want to get details of ?", value=(1, 162),
+        #                      help="Batters = 162, Bowlers = 103 ")
+        # num_col = st.slider("What is the range of columns you want to see?", value=(1, 14),
+        #                     help="Columns = 14")
 
-        disp_col = col_pl_temp[num_col[0]:num_col[1]]
+        disp_col = col_pl_temp[:]
 
-        st.write(data[disp_col][num_play[0]:num_play[1]])
+        st.write(data[disp_col][:])
 
     except IndexError:
         st.info(player + " is not in player stats database you are referring to")
