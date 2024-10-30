@@ -5,7 +5,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import plotly.express as px
-import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import streamlit as st
 
@@ -78,8 +77,11 @@ df_3 = formatBattingCombined(df_1, df_2)
 st.subheader(f"📉 5 Batsmen with highest T20 Runs in the period {yr_list[0]}-{yr_list[1]}")
 
 df_most_runs = df_3.sort_values(by=['Runs'], ascending=False)[:5].copy()
-plt.figure(figsize=(20, 10))
-plt.title(f"5 Batsmen with highest T20 Runs in the period {yr_list[0]}-{yr_list[1]}")
-ax = sns.barplot(x=df_most_runs["Runs"], y=df_most_runs["Player"], palette="husl")
-ax.set(ylabel="Player Name", xlabel="Runs Scored")
-st.pyplot(fig=plt)
+
+st.bar_chart(df_most_runs, x='Player', y='Runs', color='#ffaa00')
+
+# plt.figure(figsize=(20, 10))
+# plt.title(f"5 Batsmen with highest T20 Runs in the period {yr_list[0]}-{yr_list[1]}")
+# ax = sns.barplot(x=df_most_runs["Runs"], y=df_most_runs["Player"], palette="husl")
+# ax.set(ylabel="Player Name", xlabel="Runs Scored")
+# st.pyplot(fig=plt)
